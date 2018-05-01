@@ -38,7 +38,7 @@
                         <tr>
                             <td><c:out value="${prod.getNome()}" /></td>
                             <td><c:out value="${prod.getMarca()}" /></td>
-                            <td><c:out value="${prod.getPreco()}" /></td>
+                            <td><c:out value="R$ ${prod.getPrecoFormatado()}" /></td>
                             <td><c:out value="${prod.getQuantidade()}" /></td>
                             <td><c:out value="${prod.getCategoria()}" /></td>
                             <td>
