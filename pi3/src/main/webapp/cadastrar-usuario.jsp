@@ -22,7 +22,7 @@
 
         <div class="content">
             <h1><i class="fa fa-edit fa-lg"></i> Cadastrar Usuário</h1>
-            <form action="/usuarios" method="post" id="formulario">
+            <form action="/cadastrar-usuario" method="post" id="formulario">
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="nome">Nome:</label>
@@ -54,7 +54,7 @@
                     $.ajax({
                         type: "POST",
                         url: window.location.href,
-                        data: $("#form").serialize(),
+                        data: $("#formulario").serialize(),
                         success: function (result, status) {
                             alert(result);
                             if (status == 'success') {

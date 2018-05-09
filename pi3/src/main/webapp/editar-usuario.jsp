@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Editar Produto</title>
+        <title>Editar Usuário</title>
 
         <style>
             <%@include file="./css/geral.css" %>
@@ -25,21 +25,35 @@
             <form action="/usuarios" method="post" id="formulario">
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label for="user">Usuario</label>
+                        <label for="nome">Nome:</label>
+                        <input type="text" class="form-control" name="nome" id="nome" value="<c:out value="${user.getNome()}" />" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="cpf">CPF:</label>
+                        <input type="text" class="form-control" name="cpf" id="cpf" value="<c:out value="${user.getCpf()}" />" required>
+                    </div>
+                </div>            
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="user">User:</label>
                         <input type="text" class="form-control" name="user" id="user" value="<c:out value="${user.getUser()}" />" required>
                     </div>
-                    
-                </div>
+                    <div class="form-group col-md-3">
+                        <label for="pass">Senha:</label>
+                        <input type="password" class="form-control" name="pass" id="pass" value="<c:out value="${user.getPass()}" />" required>
+                    </div>
+                </div>            
+               
                 <input type="submit" class="btn btn-info" value="Salvar">            
                 <a href="./usuarios" class="btn btn-info" role="button">Cancelar</a>
             </form>       
             <script>                
-                $("#form").submit(function (e) {                                
+                $("#formulario").submit(function (e) {                                
                     e.preventDefault();
                     $.ajax({
                         type: "POST",
                         url: window.location.href,
-                        data: $("#form").serialize(),
+                        data: $("#formulario").serialize(),
                         success: function (result, status) {
                             alert(result);                            
                             window.location.href = './usuarios';
