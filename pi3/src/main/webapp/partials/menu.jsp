@@ -35,7 +35,7 @@
                 </li>
                 <ul class="sub-menu collapse" id="usuario">
                     <li><a href="./cadastrar-usuario">Cadastrar Usuário</a></li>
-                    <li><a href="./gerenciar-usuario">Gerenciar Usuários</a></li>
+                    <li><a href="./usuarios">Gerenciar Usuários</a></li>
                 </ul>
 
                 <li>

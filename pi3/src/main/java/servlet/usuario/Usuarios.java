@@ -19,13 +19,13 @@ import ads.pi3.model.Usuario;
 import java.util.List;
 
 
-@WebServlet(urlPatterns = {"/usuarios"})
+@WebServlet(urlPatterns = {"/usuario"})
 public class Usuarios extends HttpServlet {    
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                
         List<Usuario> teste = UsuarioDAO.listar();                
-        request.setAttribute("usuarios", teste);        
+        request.setAttribute("usuario", teste);        
         RequestDispatcher meuk = request.getRequestDispatcher("usuarios.jsp");
         meuk.forward(request, response);
     }    
