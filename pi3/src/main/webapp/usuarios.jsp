@@ -28,19 +28,18 @@
                         <th scope="col">Nome</th>
                         <th scope="col">CPF</th>
                         <th scope="col">Usuário</th>
-                      
                         <th scope="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="user" items="${usuarios}">
                         <tr>
-                           <td><c:out value="${user.getNome()}" /></td>
-                           <td><c:out value="${user.getCpf()}" /></td>
+                            <td><c:out value="${user.getNome()}" /></td>
+                            <td><c:out value="${user.getCpf()}" /></td>
                             <td><c:out value="${user.getUser()}" /></td>
                             <td>
-                                <a href="./editar-usuario?user=<c:out value="${user.getUser()}" />" title="Editar"><i class="fa fa-edit fa-lg"></i></a>
-                                <a class="remove-item"href="#" title="Excluir" dt-id="<c:out value="${user.getUser()}" />"><i class="fa fa-trash fa-lg"></i></a>
+                                <a href="./editar-usuario?id=<c:out value="${user.getId()}" />" title="Editar"><i class="fa fa-edit fa-lg"></i></a>
+                                <a class="remove-item"href="#" title="Excluir" dt-id="<c:out value="${user.getId()}" />"><i class="fa fa-trash fa-lg"></i></a>
                             </td>
                         </tr>
                     </c:forEach>
@@ -50,7 +49,7 @@
                         e.preventDefault();        
                         var user = e.currentTarget;                        
                         var nomeUsuario = user.parentNode.parentNode.children[0].innerText;
-                        var excluir = confirm('Deseja excluir o usuário "'+nomeUsuário+'" ?');
+                        var excluir = confirm('Deseja excluir o usuário "'+nomeUsuario+'" ?');
                         if(!excluir) return;
                                 
                         window.currentUser = user;
