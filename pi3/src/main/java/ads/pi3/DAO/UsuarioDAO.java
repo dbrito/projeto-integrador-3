@@ -1,7 +1,7 @@
 package ads.pi3.DAO;
 
 import ads.pi3.utils.ConnectionFactory;
-import ads.pi3.model.Produto;
+import ads.pi3.model.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,41 +14,38 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-public class ProdutoDAO {
+public class UsuarioDAO {
     
-    private static int totalProdutos = 0;
-    private static List<Produto> listaProdutos = new ArrayList<Produto>();
+    private static int totalUsuario = 0;
+    private static List<Usuario> listaUsuarios = new ArrayList<Usuario>();
     
     // inserir no banco de dados
-    public static void inserir (Produto produto){
+    public static void inserir (Usuario usuario){
         Connection con = ConnectionFactory.getConnetion();
         PreparedStatement stmt = null;
         
         try {
             // insert para o banco
-            stmt = con.prepareStatement("INSERT INTO produto ( nome, marca, preco, quantidade, categoria, descricao, ativo) VALUES(?,?,?,?,?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO usuarios (nome, cpf, user, pass) VALUES(?,?,?,?)");
             // passando os dados para o insert            
-            stmt.setString(1, produto.getNome());
-            stmt.setString(2, produto.getMarca());
-            stmt.setDouble(3, produto.getPreco());
-            stmt.setInt(4, produto.getQuantidade());
-            stmt.setString(5, produto.getCategoria());
-            stmt.setString(6, produto.getDescricao());
-            stmt.setInt(7, 1);            
+            stmt.setString(1, usuario.getNome());
+            stmt.setString(2, usuario.getCpf());
+            stmt.setString(3, usuario.getUser());
+            stmt.setString(4, usuario.getPass());
             stmt.execute();            
         } catch (SQLException ex) {
             System.out.print(ex);
-            Logger.getLogger(ProdutoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             ConnectionFactory.closeConnection(con, stmt);
         }
         
  }
     
-    public static void atualizar(Produto produto) throws SQLException, Exception {
+    public static void atualizar(Usuario usuario) throws SQLException, Exception {
         //Monta a string de atualização do cliente no BD, utilizando
         //prepared statement
-        String sql = "UPDATE produto SET nome=?, marca=?, preco=?, quantidade=?, categoria=?, descricao=? "
+        String sql = "UPDATE usuarios SET nome=?, cpf=?, user=?, pass=? "
             + "WHERE (id=?)";
         //Conexão para abertura e fechamento
         Connection connection = null;
@@ -62,13 +59,11 @@ public class ProdutoDAO {
             //Cria um statement para execução de instruções SQL
             preparedStatement = connection.prepareStatement(sql);
             //Configura os parâmetros do "PreparedStatement"
-            preparedStatement.setString(1, produto.getNome());
-            preparedStatement.setString(2, produto.getMarca());
-            preparedStatement.setDouble(3, produto.getPreco());
-            preparedStatement.setInt(4, produto.getQuantidade());            
-            preparedStatement.setString(5, produto.getCategoria());
-            preparedStatement.setString(6, produto.getDescricao());
-            preparedStatement.setInt(7, produto.getId());
+            preparedStatement.setString(1, usuario.getNome());
+            preparedStatement.setString(2, usuario.getCpf());
+            preparedStatement.setString(3, usuario.getUser());
+            preparedStatement.setString(4, usuario.getPass());
+            preparedStatement.setInt(5, usuario.getId());
             
             //Executa o comando no banco de dados
             preparedStatement.execute();
@@ -87,7 +82,7 @@ public class ProdutoDAO {
     public static void excluir(int id) throws SQLException, Exception {
         //Monta a string de atualização do cliente no BD, utilizando
         //prepared statement
-        String sql = "UPDATE produto SET ativo=0 WHERE (id=?)";
+        String sql = "DELETE * from usuarios WHERE (id=?)";
         //Conexão para abertura e fechamento
         Connection connection = null;
         //Statement para obtenção através da conexão, execução de
@@ -115,44 +110,41 @@ public class ProdutoDAO {
         }
     }
      
-    // listar os produtos
-    public static List <Produto>  listar (){
+    // listar os usuarios
+    public static List <Usuario>  listar (){
         Connection con = ConnectionFactory.getConnetion();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
-        List<Produto> produtos = new ArrayList<>();
+        List<Usuario> usuarios = new ArrayList<>();
         
         try {
-            stmt = con.prepareStatement("SELECT * FROM produto where ativo=1");
+            stmt = con.prepareStatement("SELECT * FROM usuarios");
             rs = stmt.executeQuery();
             while (rs.next()) {                
-                Produto produto = new Produto();
-                produto.setId(rs.getInt("id"));                
-                produto.setNome(rs.getString("nome"));
-                produto.setMarca(rs.getString("marca"));
-                produto.setPreco(rs.getDouble("preco"));
-                produto.setQuantidade(rs.getInt("quantidade"));
-                produto.setCategoria(rs.getString("categoria"));
-                produto.setDescricao(rs.getString("descricao"));
-                produto.setEnabled(rs.getInt("ativo"));
-                produtos.add(produto);
+                Usuario usuario = new Usuario();
+                usuario.setId(rs.getInt("id"));                
+                usuario.setNome(rs.getString("nome"));
+                usuario.setNome(rs.getString("cpf"));
+                usuario.setNome(rs.getString("user"));
+                usuario.setNome(rs.getString("pass"));
+                usuarios.add(usuario);
             }
         } catch (SQLException ex) {
             System.out.print(ex);
-            Logger.getLogger(ProdutoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
             //JOptionPane.showMessageDialog(, "");
             
         }finally{
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
         
-        return produtos;
+        return usuarios;
     }
     
     //Procura um cliente no banco de dados, de acordo com o nome
     //ou com o sobrenome, passado como parâmetro
-    public static List<Produto> procurar(String valor) throws SQLException, Exception {
+    public static List<Usuario> procurar(String valor) throws SQLException, Exception {
         //Monta a string de consulta de clientes no banco, utilizando
         //o valor passado como parâmetro para busca nas colunas de
         //nome ou sobrenome (através do "LIKE" e ignorando minúsculas
@@ -160,10 +152,10 @@ public class ProdutoDAO {
         //parâmetro). Além disso, também considera apenas os elementos
         //que possuem a coluna de ativação de clientes configurada com
         //o valor correto ("enabled" com "true")
-        String sql = "SELECT * FROM produto WHERE ((UPPER(nome) LIKE UPPER(?) "
-            + "OR UPPER(codigo) LIKE UPPER(?) OR UPPER(marca) LIKE UPPER(?)) AND enabled=1)";
+        String sql = "SELECT * FROM usuarios WHERE ((UPPER(nome) LIKE UPPER(?) "
+            + "OR UPPER(user) LIKE UPPER(?))";
         //Lista de clientes de resultado
-        List<Produto> listaProdutos = null;
+        List<Usuario> listaUsuarios = null;
         //Conexão para abertura e fechamento
         Connection connection = null;
         //Statement para obtenção através da conexão, execução de
@@ -179,29 +171,26 @@ public class ProdutoDAO {
             //Configura os parâmetros do "PreparedStatement"
             preparedStatement.setString(1, "%" + valor + "%");
             preparedStatement.setString(2, "%" + valor + "%");
-            preparedStatement.setString(3, "%" + valor + "%");            
+                 
             //Executa a consulta SQL no banco de dados
             result = preparedStatement.executeQuery();
             
             //Itera por cada item do resultado
             while (result.next()) {
                 //Se a lista não foi inicializada, a inicializa
-                if (listaProdutos == null) {
-                    listaProdutos = new ArrayList<Produto>();
+                if (listaUsuarios == null) {
+                    listaUsuarios = new ArrayList<Usuario>();
                 }
                 //Cria uma instância de Cliente e popula com os valores do BD
-                Produto produto = new Produto();
-                produto.setId(result.getInt("id"));
-                produto.setCodigo(result.getString("codigo"));
-                produto.setNome(result.getString("nome"));
-                produto.setMarca(result.getString("marca"));
-                produto.setPreco(result.getDouble("preco"));
-                produto.setQuantidade(result.getInt("quantidade"));
-                produto.setDescricao(result.getString("descricao"));
-                produto.setCategoria(result.getString("categoria"));
-                produto.setEnabled(result.getInt("enabled"));
+                Usuario usuario = new Usuario();
+                usuario.setId(result.getInt("id"));
+                usuario.setNome(result.getString("nome"));
+                usuario.setCpf(result.getString("cpf"));
+                usuario.setUser(result.getString("user"));
+                usuario.setPass(result.getString("pass"));
+             
                 //Adiciona a instância na lista
-                listaProdutos.add(produto);
+                listaUsuarios.add(usuario);
             }
         } finally {
             //Se o result ainda estiver aberto, realiza seu fechamento
@@ -218,13 +207,13 @@ public class ProdutoDAO {
             }
         }
         //Retorna a lista de clientes do banco de dados
-        return listaProdutos;        
+        return listaUsuarios;        
     }    
     
-    public static Produto obter(int id) throws SQLException, Exception {
+    public static Usuario obter(int id) throws SQLException, Exception {
         //Compõe uma String de consulta que considera apenas o cliente
         //com o ID informado e que esteja ativo ("enabled" com "true")
-        String sql = "SELECT * FROM produto WHERE (id=?)";
+        String sql = "SELECT * FROM usuarios WHERE (id=?)";
 
         //Conexão para abertura e fechamento
         Connection connection = null;
@@ -247,17 +236,15 @@ public class ProdutoDAO {
             //Verifica se há pelo menos um resultado
             if (result.next()) {                
                 //Cria uma instância de Cliente e popula com os valores do BD
-                Produto produto = new Produto();
-                produto.setId(result.getInt("id"));
-                produto.setNome(result.getString("nome"));
-                produto.setMarca(result.getString("marca"));                
-                produto.setPreco(result.getDouble("preco"));
-                produto.setCategoria(result.getString("categoria"));
-                produto.setQuantidade(result.getInt("quantidade"));
-                produto.setDescricao(result.getString("descricao"));
-                produto.setEnabled(result.getInt("ativo"));                
+                Usuario usuario = new Usuario();
+                usuario.setId(result.getInt("id"));
+                usuario.setNome(result.getString("nome"));
+                usuario.setCpf(result.getString("cpf"));  
+                usuario.setUser(result.getString("user"));
+                usuario.setPass(result.getString("pass"));   
+                          
                 //Retorna o resultado
-                return produto;
+                return usuario;
             }            
         } finally {
             //Se o result ainda estiver aberto, realiza seu fechamento

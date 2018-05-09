@@ -9,8 +9,8 @@
                     </a>
                 </li>
                 <ul class="sub-menu collapse" id="loja">
-                    <li><a href="./cadastrar-filial">Cadastrar Filial</a></li>
-                    <li><a href="#">Gerenciar Filial</a></li>
+                    <li><a href="#">Cadastrar Loja</a></li>
+                    <li><a href="#">Gerenciar Lojas</a></li>
                 </ul>
 
 
@@ -20,23 +20,22 @@
                 <ul class="sub-menu collapse" id="produto">
                     <li><a href="./cadastrar-produto">Cadastrar Produto</a></li>
                     <li><a href="./produtos">Gerenciar Produtos</a></li>
-                    
                 </ul>
 
                 <li data-toggle="collapse" data-target="#cliente" class="collapsed">
                     <a href="#"><i class="fa fa-users fa-lg"></i> Clientes <span class="arrow"></span></a>
                 </li>
                 <ul class="sub-menu collapse" id="cliente">
-                    <li><a href="./cadastrar-cliente">Cadastrar Cliente</a></li>
-                    <li><a href="./cliente">Gerenciar Clientes</a></li>
+                    <li><a href="#">Cadastrar Cliente</a></li>
+                    <li><a href="#">Gerenciar Clientes</a></li>
                 </ul>
 
                 <li data-toggle="collapse" data-target="#usuario" class="collapsed">
-                    <a href="#"><i class="fa fa-user fa-lg"></i> UsuÃ¡rios <span class="arrow"></span></a>
+                    <a href="#"><i class="fa fa-user fa-lg"></i> Usuários <span class="arrow"></span></a>
                 </li>
                 <ul class="sub-menu collapse" id="usuario">
-                    <li><a href="#">Cadastrar UsuÃ¡rio</a></li>
-                    <li><a href="#">Gerenciar UsuÃ¡rios</a></li>
+                    <li><a href="./cadastrar-usuario">Cadastrar Usuário</a></li>
+                    <li><a href="./gerenciar-usuario">Gerenciar Usuários</a></li>
                 </ul>
 
                 <li>
