@@ -22,7 +22,7 @@
 
         <div class="content">
             <h1><i class="fa fa-edit fa-lg"></i> Editar Usuário</h1>
-            <form action="/usuarios" method="post" id="formulario">
+            <form action="/editar-usuario" method="post" id="formulario">
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="nome">Nome:</label>
@@ -56,7 +56,7 @@
                         data: $("#formulario").serialize(),
                         success: function (result, status) {
                             alert(result);                            
-                            window.location.href = './usuarios';
+                            window.location.href = './editar-usuario';
                         }, error: function (err) {
                             alert('Erro tente novamente mais tarde;')
                         }

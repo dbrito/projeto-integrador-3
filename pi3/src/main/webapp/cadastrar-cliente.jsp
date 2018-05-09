@@ -28,7 +28,7 @@
 
         <div class="content">
             <h1><i class="fa fa-edit fa-lg"></i> Cadastrar Cliente</h1>
-            <form action="/clientes" method="post" id="formulario1">
+            <form action="/cadastrar-cliente" method="post" id="formulario1">
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="nome">Nome:</label>
