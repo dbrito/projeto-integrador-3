@@ -1,0 +1,89 @@
+<%-- 
+    Document   : cadastrar-cliente
+    Created on : 08/05/2018, 13:50:59
+    Author     : ninck
+--%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastrar Cliente</title>
+
+        <style>
+            <%@include file="./css/geral.css" %>
+        </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" >
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <%@include file="./partials/menu.jsp" %>
+
+        <div class="content">
+            <h1><i class="fa fa-edit fa-lg"></i> Cadastrar Cliente</h1>
+            <form action="/clientes" method="post" id="formulario1">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="nome">Nome:</label>
+                        <input type="text" class="form-control" name="nome" id="nome" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="cpf">CPF:</label>
+                        <input type="text" class="form-control" name="cpf" id="cpf" required>
+                    </div>
+                </div>              
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="endereco">Endereço:</label>
+                         <input type="text" class="form-control" name="endereco" id="endereco" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="complemento">Complemento:</label>
+                        <input type="text" class="form-control" name="complemento" id="complemento" required>
+                    </div>
+                </div>            
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="data-nascimento">Data Nascimento:</label>
+                     <input type="date" class="form-control" name="data-nascimento" id="data-nascimento" required>
+                   
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-info" value="Salvar">            
+                <!-- <a href="#" class="btn btn-info" role="button">Cancelar</a> -->
+            </form>       
+            <script>
+                $('#formulario1').click(function () { console.log('here') })
+                $("#formulario1").submit(function (e) {                                
+                    e.preventDefault();
+                    $.ajax({
+                        type: "POST",
+                        url: window.location.href,
+                        data: $("#formulario1").serialize(),
+                        success: function (result, status) {
+                            alert(result);
+                            if (status == 'success') {
+                                $('#nome').val('');
+                                $('#cpf').val('');
+                                $('#endereco').val('');
+                                $('#complemento').val('');
+                                $('#data-nascimento').val('');                            
+                            }
+                        }, error: function (err) {
+                            alert('Erro tente novamente mais tarde;')
+                        }
+                    });                
+                });
+            </script>
+        </div>
+
+    </body>
+</html>
+

@@ -27,8 +27,8 @@
                     <a href="#"><i class="fa fa-users fa-lg"></i> Clientes <span class="arrow"></span></a>
                 </li>
                 <ul class="sub-menu collapse" id="cliente">
-                    <li><a href="#">Cadastrar Cliente</a></li>
-                    <li><a href="#">Gerenciar Clientes</a></li>
+                    <li><a href="./cadastrar-cliente">Cadastrar Cliente</a></li>
+                    <li><a href="./cliente">Gerenciar Clientes</a></li>
                 </ul>
 
                 <li data-toggle="collapse" data-target="#usuario" class="collapsed">
