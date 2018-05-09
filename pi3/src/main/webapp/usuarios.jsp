@@ -33,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="user" items="${usuario}">
+                    <c:forEach var="user" items="${usuarios}">
                         <tr>
                            <td><c:out value="${user.getNome()}" /></td>
                            <td><c:out value="${user.getCpf()}" /></td>
