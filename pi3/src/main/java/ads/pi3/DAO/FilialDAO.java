@@ -1,7 +1,7 @@
 package ads.pi3.DAO;
 
+import ads.pi3.model.Filial;
 import ads.pi3.utils.ConnectionFactory;
-import ads.pi3.model.Produto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,27 +11,25 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ProdutoDAO {
-    
+public class FilialDAO {
+
     private static int totalProdutos = 0;
-    private static List<Produto> listaProdutos = new ArrayList<Produto>();
+    private static List<Filial> listaFiliais = new ArrayList<Filial>();
     
-    // inserir no banco de dados
-    public static void inserir (Produto produto){
+    // Iniciando a conexão com o banco.
+    public static void inserir (Filial filial){
         Connection con = ConnectionFactory.getConnetion();
         PreparedStatement stmt = null;
         
         try {
-            // insert para o banco
-            stmt = con.prepareStatement("INSERT INTO produto ( nome, marca, preco, quantidade, categoria, descricao, ativo) VALUES(?,?,?,?,?,?,?)");
+            // Inserindo os valores para o Banco com o parâmetro.
+            stmt = con.prepareStatement("INSERT INTO filial (nomeFilial, endereco, numero, cidade, estado) VALUES(?,?,?,?,?)");
             // passando os dados para o insert            
-            stmt.setString(1, produto.getNome());
-            stmt.setString(2, produto.getMarca());
-            stmt.setDouble(3, produto.getPreco());
-            stmt.setInt(4, produto.getQuantidade());
-            stmt.setString(5, produto.getCategoria());
-            stmt.setString(6, produto.getDescricao());
-            stmt.setInt(7, 1);            
+            stmt.setString(1, filial.getNomeFilial());
+            stmt.setString(2, filial.getEndereco());
+            stmt.setInt(3, filial.getNumero());
+            stmt.setString(4, filial.getCidade());
+            stmt.setString(5, filial.getEstado());
             stmt.execute();            
         } catch (SQLException ex) {
             System.out.print(ex);
@@ -42,10 +40,10 @@ public class ProdutoDAO {
         
  }
     
-    public static void atualizar(Produto produto) throws SQLException, Exception {
+    public static void atualizar(Filial filial) throws SQLException, Exception {
         //Monta a string de atualização do cliente no BD, utilizando
         //prepared statement
-        String sql = "UPDATE produto SET nome=?, marca=?, preco=?, quantidade=?, categoria=?, descricao=? "
+        String sql = "UPDATE produto SET nomeFilial=?, endereco=?, numero=?, cidade=?, estado=? "
             + "WHERE (id=?)";
         //Conexão para abertura e fechamento
         Connection connection = null;
@@ -59,13 +57,12 @@ public class ProdutoDAO {
             //Cria um statement para execução de instruções SQL
             preparedStatement = connection.prepareStatement(sql);
             //Configura os parâmetros do "PreparedStatement"
-            preparedStatement.setString(1, produto.getNome());
-            preparedStatement.setString(2, produto.getMarca());
-            preparedStatement.setDouble(3, produto.getPreco());
-            preparedStatement.setInt(4, produto.getQuantidade());            
-            preparedStatement.setString(5, produto.getCategoria());
-            preparedStatement.setString(6, produto.getDescricao());
-            preparedStatement.setInt(7, produto.getId());
+            preparedStatement.setString(1, filial.getNomeFilial());
+            preparedStatement.setString(2, filial.getEndereco());
+            preparedStatement.setInt(3, filial.getNumero());
+            preparedStatement.setString(4, filial.getCidade());            
+            preparedStatement.setString(5, filial.getEstado());
+            preparedStatement.setInt(6, filial.getId());
             
             //Executa o comando no banco de dados
             preparedStatement.execute();
@@ -113,30 +110,30 @@ public class ProdutoDAO {
     }
      
     // listar os produtos
-    public static List <Produto>  listar (){
+    public static List <Filial>  listar (){
         Connection con = ConnectionFactory.getConnetion();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
-        List<Produto> produtos = new ArrayList<>();
+        List<Filial> filiais = new ArrayList<>();
         
         try {
-            stmt = con.prepareStatement("SELECT * FROM produto where ativo=1");
+            stmt = con.prepareStatement("SELECT * FROM filial");
             rs = stmt.executeQuery();
             while (rs.next()) {                
-                Produto produto = new Produto();
-                produto.setId(rs.getInt("id"));                
-                produto.setNome(rs.getString("nome"));
-                produto.setMarca(rs.getString("marca"));
-                produto.setPreco(rs.getDouble("preco"));
-                produto.setQuantidade(rs.getInt("quantidade"));
-                produto.setCategoria(rs.getString("categoria"));
-                produto.setDescricao(rs.getString("descricao"));
-                produto.setEnabled(rs.getInt("ativo"));
-                produtos.add(produto);
+                Filial filial = new Filial();
+                filial.setId(rs.getInt("id"));                
+                filial.setNomeFilial(rs.getString("nomeFilial"));
+                filial.setEndereco(rs.getString("endereco"));
+                filial.setNumero(rs.getInt("numero"));
+                filial.setCidade(rs.getString("cidade"));
+                filial.setEstado(rs.getString("estado"));
+                
+                filiais.add(filial);
             }
         } catch (SQLException ex) {
-            System.out.print(ex);
+            System.out.print("Não foi possivel listar!");
+            ex.printStackTrace();
             Logger.getLogger(ProdutoDAO.class.getName()).log(Level.SEVERE, null, ex);
             //JOptionPane.showMessageDialog(, "");
             
@@ -144,12 +141,12 @@ public class ProdutoDAO {
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
         
-        return produtos;
+        return filiais;
     }
     
     //Procura um cliente no banco de dados, de acordo com o nome
     //ou com o sobrenome, passado como parâmetro
-    public static List<Produto> procurar(String valor) throws SQLException, Exception {
+    public static List<Filial> procurar(String valor) throws SQLException, Exception {
         //Monta a string de consulta de clientes no banco, utilizando
         //o valor passado como parâmetro para busca nas colunas de
         //nome ou sobrenome (através do "LIKE" e ignorando minúsculas
@@ -157,10 +154,10 @@ public class ProdutoDAO {
         //parâmetro). Além disso, também considera apenas os elementos
         //que possuem a coluna de ativação de clientes configurada com
         //o valor correto ("enabled" com "true")
-        String sql = "SELECT * FROM produto WHERE ((UPPER(nome) LIKE UPPER(?) "
-            + "OR UPPER(codigo) LIKE UPPER(?) OR UPPER(marca) LIKE UPPER(?)) AND enabled=1)";
+        String sql = "SELECT * FROM filial WHERE ((UPPER(nomeFilial) LIKE UPPER(?) "
+            + "OR UPPER(id) LIKE UPPER(?) OR UPPER(cidade) LIKE UPPER(?)))";
         //Lista de clientes de resultado
-        List<Produto> listaProdutos = null;
+        List<Filial> listaFiliais = null;
         //Conexão para abertura e fechamento
         Connection connection = null;
         //Statement para obtenção através da conexão, execução de
@@ -182,24 +179,25 @@ public class ProdutoDAO {
             
             //Itera por cada item do resultado
             while (result.next()) {
-                //Se a lista não foi inicializada, a inicializa
-                if (listaProdutos == null) {
-                    listaProdutos = new ArrayList<Produto>();
+                
+                if (listaFiliais == null) {
+                    listaFiliais = new ArrayList<Filial>();
                 }
+                
+                //Se a lista não foi inicializada, a inicializa
                 //Cria uma instância de Cliente e popula com os valores do BD
-                Produto produto = new Produto();
-                produto.setId(result.getInt("id"));
-                produto.setCodigo(result.getString("codigo"));
-                produto.setNome(result.getString("nome"));
-                produto.setMarca(result.getString("marca"));
-                produto.setPreco(result.getDouble("preco"));
-                produto.setQuantidade(result.getInt("quantidade"));
-                produto.setDescricao(result.getString("descricao"));
-                produto.setCategoria(result.getString("categoria"));
-                produto.setEnabled(result.getInt("enabled"));
+                Filial filial = new Filial();
+                filial.setId(result.getInt("id"));
+                filial.setNomeFilial(result.getString("nomeFilial"));
+                filial.setEndereco(result.getString("endereco"));
+                filial.setNumero(result.getInt("numero"));
+                filial.setCidade(result.getString("cidade"));
+                filial.setEstado(result.getString("estado"));
+                
                 //Adiciona a instância na lista
-                listaProdutos.add(produto);
-            }
+                listaFiliais.add(filial);
+                }
+                
         } finally {
             //Se o result ainda estiver aberto, realiza seu fechamento
             if (result != null && !result.isClosed()) {
@@ -215,13 +213,13 @@ public class ProdutoDAO {
             }
         }
         //Retorna a lista de clientes do banco de dados
-        return listaProdutos;        
+        return listaFiliais;        
     }    
     
-    public static Produto obter(int id) throws SQLException, Exception {
+    public static Filial obter(int id) throws SQLException, Exception {
         //Compõe uma String de consulta que considera apenas o cliente
         //com o ID informado e que esteja ativo ("enabled" com "true")
-        String sql = "SELECT * FROM produto WHERE (id=?)";
+        String sql = "SELECT * FROM filial WHERE (id=?)";
 
         //Conexão para abertura e fechamento
         Connection connection = null;
@@ -244,17 +242,17 @@ public class ProdutoDAO {
             //Verifica se há pelo menos um resultado
             if (result.next()) {                
                 //Cria uma instância de Cliente e popula com os valores do BD
-                Produto produto = new Produto();
-                produto.setId(result.getInt("id"));
-                produto.setNome(result.getString("nome"));
-                produto.setMarca(result.getString("marca"));                
-                produto.setPreco(result.getDouble("preco"));
-                produto.setCategoria(result.getString("categoria"));
-                produto.setQuantidade(result.getInt("quantidade"));
-                produto.setDescricao(result.getString("descricao"));
-                produto.setEnabled(result.getInt("ativo"));                
+                Filial filial = new Filial();
+                filial.setId(result.getInt("id"));
+                filial.setNomeFilial(result.getString("nomeFilial"));
+                filial.setEndereco(result.getString("endereco"));                
+                filial.setNumero(result.getInt("numero"));
+                filial.setCidade(result.getString("cidade"));
+                filial.setEstado(result.getString("estado"));
+                
+                                
                 //Retorna o resultado
-                return produto;
+                return filial;
             }            
         } finally {
             //Se o result ainda estiver aberto, realiza seu fechamento
@@ -277,3 +275,7 @@ public class ProdutoDAO {
         return null;
     }
 }
+
+
+    
+
