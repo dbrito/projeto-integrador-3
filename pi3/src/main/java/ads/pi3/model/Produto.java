@@ -1,8 +1,5 @@
 package ads.pi3.model;
 
-import java.text.NumberFormat;
-import java.util.Locale;
-
 public class Produto {
 
     //Atributos
@@ -59,11 +56,6 @@ public class Produto {
 
     public double getPreco() {
         return preco;
-    }
-    
-    public String getPrecoFormatado() {
-        Locale ptBr = new Locale("pt", "BR");        
-        return NumberFormat.getCurrencyInstance(ptBr).format(this.preco).replace("R$ ", "");
     }
 
     public void setPreco(double preco) {
