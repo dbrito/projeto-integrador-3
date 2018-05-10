@@ -9,11 +9,10 @@
                     </a>
                 </li>
                 <ul class="sub-menu collapse" id="loja">
-                    <li><a href="#">Cadastrar Loja</a></li>
+                    <li><a href="./cadastrar-filial">Cadastrar Loja</a></li>
                     <li><a href="#">Gerenciar Lojas</a></li>
                 </ul>
-
-
+                
                 <li data-toggle="collapse" data-target="#produto" class="collapsed">
                     <a href="#"><i class="fa fa-shopping-cart fa-lg"></i> Produtos <span class="arrow"></span></a>
                 </li>
@@ -26,8 +25,8 @@
                     <a href="#"><i class="fa fa-users fa-lg"></i> Clientes <span class="arrow"></span></a>
                 </li>
                 <ul class="sub-menu collapse" id="cliente">
-                    <li><a href="cadastrar-cliente">Cadastrar Cliente</a></li>
-                    <li><a href="#">Gerenciar Clientes</a></li>
+                    <li><a href="./cadastrar-cliente">Cadastrar Cliente</a></li>
+                    <li><a href="./clientes">Gerenciar Clientes</a></li>
                 </ul>
 
                 <li data-toggle="collapse" data-target="#usuario" class="collapsed">
@@ -36,6 +35,14 @@
                 <ul class="sub-menu collapse" id="usuario">
                     <li><a href="./cadastrar-usuario">Cadastrar Usuário</a></li>
                     <li><a href="./usuarios">Gerenciar Usuários</a></li>
+                </ul>
+                
+                <li data-toggle="collapse" data-target="#venda" class="collapsed">
+                    <a href="#"><i class="fa fa-shopping-cart fa-lg"></i> Vendas <span class="arrow"></span></a>
+                </li>
+                <ul class="sub-menu collapse" id="venda">
+                    <li><a href="./realizar-venda">Realizar Venda</a></li>
+                    <li><a href="./relatorio">Gerar relátorios</a></li>
                 </ul>
 
                 <li>
