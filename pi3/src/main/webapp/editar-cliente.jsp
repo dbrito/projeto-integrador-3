@@ -57,7 +57,7 @@
                         data: $("#formulario").serialize(),
                         success: function (result, status) {
                             alert(result);                            
-                            window.location.href = './editar-cliente';
+                            window.location.href = './clientes';
                         }, error: function (err) {
                             alert('Erro tente novamente mais tarde;')
                         }
