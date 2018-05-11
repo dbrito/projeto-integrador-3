@@ -83,7 +83,7 @@ public class UsuarioDAO {
     public static void excluir(int id) throws SQLException, Exception {
         //Monta a string de atualização do cliente no BD, utilizando
         //prepared statement
-        String sql = "DELETE * from usuarios WHERE (id=?)";
+        String sql = "UPDATE usuarios SET ativo=0 WHERE (id=?)";
         //Conexão para abertura e fechamento
         Connection connection = null;
         //Statement para obtenção através da conexão, execução de
@@ -126,9 +126,9 @@ public class UsuarioDAO {
                 Usuario usuario = new Usuario();
                 usuario.setId(rs.getInt("id"));                
                 usuario.setNome(rs.getString("nome"));
-                usuario.setNome(rs.getString("cpf"));
-                usuario.setNome(rs.getString("user"));
-                usuario.setNome(rs.getString("pass"));
+                usuario.setCpf(rs.getString("cpf"));
+                usuario.setUser(rs.getString("user"));
+                usuario.setPass(rs.getString("pass"));
                 usuario.setEnabled(rs.getInt("ativo"));
                 usuarios.add(usuario);
             }
@@ -154,8 +154,8 @@ public class UsuarioDAO {
         //parâmetro). Além disso, também considera apenas os elementos
         //que possuem a coluna de ativação de clientes configurada com
         //o valor correto ("enabled" com "true")
-        String sql = "SELECT * FROM usuarios WHERE ((UPPER(nome) LIKE UPPER(?) "
-            + "OR UPPER(user) LIKE UPPER(?) AND enabled=1)";
+        String sql = "SELECT * FROM produto WHERE ((UPPER(nome) LIKE UPPER(?) "
+            + "OR UPPER(user) LIKE UPPER(?) OR UPPER(cpf) LIKE UPPER(?)) AND enabled=1)";
         //Lista de clientes de resultado
         List<Usuario> listaUsuarios = null;
         //Conexão para abertura e fechamento
@@ -173,7 +173,7 @@ public class UsuarioDAO {
             //Configura os parâmetros do "PreparedStatement"
             preparedStatement.setString(1, "%" + valor + "%");
             preparedStatement.setString(2, "%" + valor + "%");
-                 
+            preparedStatement.setString(3, "%" + valor + "%");   
             //Executa a consulta SQL no banco de dados
             result = preparedStatement.executeQuery();
             
