@@ -26,12 +26,13 @@ public class UsuarioDAO {
         
         try {
             // insert para o banco
-            stmt = con.prepareStatement("INSERT INTO usuarios (nome, cpf, user, pass) VALUES(?,?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO usuarios (nome, cpf, user, pass, ativo) VALUES(?,?,?,?,?)");
             // passando os dados para o insert            
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getCpf());
             stmt.setString(3, usuario.getUser());
             stmt.setString(4, usuario.getPass());
+            stmt.setInt(5, 1); 
             stmt.execute();            
         } catch (SQLException ex) {
             System.out.print(ex);
@@ -119,7 +120,7 @@ public class UsuarioDAO {
         List<Usuario> usuarios = new ArrayList<>();
         
         try {
-            stmt = con.prepareStatement("SELECT * FROM usuarios");
+            stmt = con.prepareStatement("SELECT * FROM usuarios where ativo=1");
             rs = stmt.executeQuery();
             while (rs.next()) {                
                 Usuario usuario = new Usuario();
@@ -128,6 +129,7 @@ public class UsuarioDAO {
                 usuario.setNome(rs.getString("cpf"));
                 usuario.setNome(rs.getString("user"));
                 usuario.setNome(rs.getString("pass"));
+                usuario.setEnabled(rs.getInt("ativo"));
                 usuarios.add(usuario);
             }
         } catch (SQLException ex) {
@@ -153,7 +155,7 @@ public class UsuarioDAO {
         //que possuem a coluna de ativação de clientes configurada com
         //o valor correto ("enabled" com "true")
         String sql = "SELECT * FROM usuarios WHERE ((UPPER(nome) LIKE UPPER(?) "
-            + "OR UPPER(user) LIKE UPPER(?))";
+            + "OR UPPER(user) LIKE UPPER(?) AND enabled=1)";
         //Lista de clientes de resultado
         List<Usuario> listaUsuarios = null;
         //Conexão para abertura e fechamento
@@ -188,7 +190,7 @@ public class UsuarioDAO {
                 usuario.setCpf(result.getString("cpf"));
                 usuario.setUser(result.getString("user"));
                 usuario.setPass(result.getString("pass"));
-             
+                usuario.setEnabled(result.getInt("enabled"));
                 //Adiciona a instância na lista
                 listaUsuarios.add(usuario);
             }
@@ -242,7 +244,7 @@ public class UsuarioDAO {
                 usuario.setCpf(result.getString("cpf"));  
                 usuario.setUser(result.getString("user"));
                 usuario.setPass(result.getString("pass"));   
-                          
+                usuario.setEnabled(result.getInt("ativo"));             
                 //Retorna o resultado
                 return usuario;
             }            

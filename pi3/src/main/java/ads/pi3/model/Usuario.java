@@ -12,6 +12,7 @@ package ads.pi3.model;
 public class Usuario {
     
     private Integer id;
+    private Integer enabled;
     private String user;
     private String pass;
     private String nome;
@@ -23,6 +24,13 @@ public class Usuario {
 
     public void setId(int id) {
         this.id = id;
+    }
+    
+    public Integer getEnabled() {
+        return enabled;
+    }
+    public void setEnabled(Integer enabled) {
+        this.enabled = enabled;
     }
     
     public String getUser() {
