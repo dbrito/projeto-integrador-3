@@ -34,7 +34,7 @@ public class EditarCliente extends HttpServlet {
             response.sendError(404, "Cliente não encontrado");
             Logger.getLogger(EditarCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-        request.setAttribute("Clie", clie);
+        request.setAttribute("clie", clie);
         RequestDispatcher meuk = request.getRequestDispatcher("editar-cliente.jsp");
         meuk.forward(request, response);                                        
     }

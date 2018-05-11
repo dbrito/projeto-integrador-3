@@ -22,7 +22,7 @@
 
         <div class="content">
             <h1><i class="fa fa-edit fa-lg"></i> Editar Cliente</h1>
-            <form action="/editar-cliente" method="post" id="formulario2">
+            <form action="/editar-cliente" method="post" id="formulario">
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="nome">Nome:</label>
@@ -30,7 +30,7 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="cpf">CPF:</label>
-                        <input type="number" class="form-control" name="cpf" id="cpf" required>
+                        <input type="text" class="form-control" name="cpf" id="cpf" required>
                     </div>
                 </div>              
                 <div class="row">
@@ -49,15 +49,15 @@
                 <a href="./clientes" class="btn btn-info" role="button">Cancelar</a>
             </form>       
             <script>                
-                $("#formulario2").submit(function (e) {                                
+                $("#formulario").submit(function (e) {                                
                     e.preventDefault();
                     $.ajax({
                         type: "POST",
                         url: window.location.href,
-                        data: $("#formulario2").serialize(),
+                        data: $("#formulario").serialize(),
                         success: function (result, status) {
                             alert(result);                            
-                            window.location.href = './clientes';
+                            window.location.href = './editar-cliente';
                         }, error: function (err) {
                             alert('Erro tente novamente mais tarde;')
                         }

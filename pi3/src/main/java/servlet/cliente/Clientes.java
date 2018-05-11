@@ -28,7 +28,7 @@ public class Clientes extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                
         List<Cliente> teste = ClienteDAO.listar();                
         request.setAttribute("clientes", teste);        
-        RequestDispatcher meuk = request.getRequestDispatcher("cliente.jsp");
+        RequestDispatcher meuk = request.getRequestDispatcher("clientes.jsp");
         meuk.forward(request, response);
     }    
 }
