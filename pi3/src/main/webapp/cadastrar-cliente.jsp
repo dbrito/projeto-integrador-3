@@ -28,7 +28,7 @@
 
         <div class="content">
             <h1><i class="fa fa-edit fa-lg"></i> Cadastrar Cliente</h1>
-            <form action="/cadastrar-cliente" method="post" id="formulario1">
+            <form action="/cadastrar-cliente" method="post" id="formulario">
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="nome">Nome:</label>
@@ -49,24 +49,18 @@
                         <input type="text" class="form-control" name="complemento" id="complemento" required>
                     </div>
                 </div>            
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label for="data-nascimento">Data Nascimento:</label>
-                     <input type="date" class="form-control" name="data-nascimento" id="data-nascimento" required>
-                   
-                    </div>
-                </div>
+               
                 <input type="submit" class="btn btn-info" value="Salvar">            
                 <!-- <a href="#" class="btn btn-info" role="button">Cancelar</a> -->
             </form>       
             <script>
-                $('#formulario1').click(function () { console.log('here') })
-                $("#formulario1").submit(function (e) {                                
+                $('#formulario').click(function () { console.log('here') })
+                $("#formulario").submit(function (e) {                                
                     e.preventDefault();
                     $.ajax({
                         type: "POST",
                         url: window.location.href,
-                        data: $("#formulario1").serialize(),
+                        data: $("#formulario").serialize(),
                         success: function (result, status) {
                             alert(result);
                             if (status == 'success') {
@@ -74,7 +68,7 @@
                                 $('#cpf').val('');
                                 $('#endereco').val('');
                                 $('#complemento').val('');
-                                $('#data-nascimento').val('');                            
+                                                        
                             }
                         }, error: function (err) {
                             alert('Erro tente novamente mais tarde;')

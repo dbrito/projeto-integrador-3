@@ -37,8 +37,7 @@ public class CadastrarCliente extends HttpServlet {
         novoClie.setNome(request.getParameter("nome"));        
         novoClie.setCPF(request.getParameter("cpf"));        
         novoClie.setEndereco (request.getParameter("endereco"));        
-        novoClie.setComplemento(request.getParameter("complemento"));         
-        novoClie.setDataNascimento(request.getParameter("data-nascimento"));                      
+        novoClie.setComplemento(request.getParameter("complemento"));     
         ClienteDAO.inserir(novoClie);
         
         PrintWriter resposta = response.getWriter();

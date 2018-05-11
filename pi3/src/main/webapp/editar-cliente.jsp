@@ -22,7 +22,7 @@
 
         <div class="content">
             <h1><i class="fa fa-edit fa-lg"></i> Editar Cliente</h1>
-            <form action="/clientes" method="post" id="formulario2">
+            <form action="/editar-cliente" method="post" id="formulario2">
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="nome">Nome:</label>
@@ -43,12 +43,7 @@
                         <input type="text" class="form-control" name="complemento" id="complemento" required>
                     </div>
                 </div>            
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label for="data-nascimento">Data Nascimento:</label>
-                     <input type="number" class="form-control" name="data-nascimento" id="data-nascimento" required>
-                    </div>
-                </div>
+               
                 
                 <input type="submit" class="btn btn-info" value="Salvar">            
                 <a href="./clientes" class="btn btn-info" role="button">Cancelar</a>

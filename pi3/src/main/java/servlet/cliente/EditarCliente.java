@@ -53,7 +53,7 @@ public class EditarCliente extends HttpServlet {
         clie.setCPF(request.getParameter("cpf"));        
         clie.setEndereco(request.getParameter("endereco"));         
         clie.setComplemento(request.getParameter("complemento"));         
-        clie.setDataNascimento(request.getParameter("Data Nascimento"));        
+       
                      
         try {
             ClienteDAO.atualizar(clie);

@@ -35,13 +35,13 @@ public class ClienteDAO {
         
         try {
             // insert para o banco
-            stmt = con.prepareStatement("INSERT INTO cliente ( nome, cpf, endereco, complemento, data-nascimento) VALUES(?,?,?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO cliente ( nome, cpf, endereco, complemento, ativo) VALUES(?,?,?,?,?)");
             // passando os dados para o insert            
             stmt.setString(1, cliente.getNome());
             stmt.setString(2, cliente.getCPF());
             stmt.setString(3, cliente.getEndereco());
             stmt.setString(4, cliente.getComplemento());
-            stmt.setString(5, cliente.getDataNascimento());            
+            stmt.setInt(5, 1);
             stmt.execute();            
         } catch (SQLException ex) {
             System.out.print(ex);
@@ -55,7 +55,7 @@ public class ClienteDAO {
     public static void atualizar(Cliente cliente) throws SQLException, Exception {
         //Monta a string de atualização do cliente no BD, utilizando
         //prepared statement
-        String sql = "UPDATE cliente SET nome=?, cpf=?, endereco=?, complemento=?, data-nascimento=? "
+        String sql = "UPDATE cliente SET nome=?, cpf=?, endereco=?, complemento=?"
             + "WHERE (id=?)";
         //Conexão para abertura e fechamento
         Connection connection = null;
@@ -73,8 +73,7 @@ public class ClienteDAO {
             preparedStatement.setString(2, cliente.getCPF());
             preparedStatement.setString(3, cliente.getEndereco());
             preparedStatement.setString(4, cliente.getComplemento());            
-            preparedStatement.setString(5, cliente.getDataNascimento());
-            preparedStatement.setInt(6, cliente.getId());
+            preparedStatement.setInt(5, cliente.getId());
             
             //Executa o comando no banco de dados
             preparedStatement.execute();
@@ -139,7 +138,6 @@ public class ClienteDAO {
                 cliente.setCPF(rs.getString("cpf"));
                 cliente.setEndereco(rs.getString("endereco"));
                 cliente.setComplemento(rs.getString("complemento"));
-                cliente.setDataNascimento(rs.getString("data-nascimento"));
                 cliente.setEnabled(rs.getInt("ativo"));
                 clientes.add(cliente);
             }
@@ -166,7 +164,7 @@ public class ClienteDAO {
         //que possuem a coluna de ativação de clientes configurada com
         //o valor correto ("enabled" com "true")
         String sql = "SELECT * FROM cliente WHERE ((UPPER(nome) LIKE UPPER(?) "
-            + "OR UPPER(cpf) LIKE UPPER(?) OR UPPER(endereco) LIKE UPPER(?) OR UPPER(complemento) LIKE UPPER(?) OR UPPER(data-nascimento) LIKE UPPER(?)) AND enabled=1)";
+            + "OR UPPER(cpf) LIKE UPPER(?) OR UPPER(endereco) LIKE UPPER(?)) AND enabled=1)";
         //Lista de clientes de resultado
         List<Cliente> listaClientes = null;
         //Conexão para abertura e fechamento
@@ -201,7 +199,6 @@ public class ClienteDAO {
                 cliente.setCPF(result.getString("cpf"));
                 cliente.setEndereco(result.getString("endereco"));
                 cliente.setComplemento(result.getString("complemento"));
-                cliente.setDataNascimento(result.getString("data-nascimento"));
                 cliente.setEnabled(result.getInt("enabled"));
                 //Adiciona a instância na lista
                 listaClientes.add(cliente);
@@ -256,7 +253,6 @@ public class ClienteDAO {
                 cliente.setCPF(result.getString("cpf"));                
                 cliente.setEndereco(result.getString("endereco"));
                 cliente.setComplemento(result.getString("complemento"));
-                cliente.setDataNascimento(result.getString("data-nascimento"));
                 cliente.setEnabled(result.getInt("ativo"));                
                 //Retorna o resultado
                 return cliente;

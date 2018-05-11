@@ -19,7 +19,7 @@ package ads.pi3.model;
     private String cpf;
     private String endereco;
     private String complemento;
-    private String datanascimento;
+
 
 
     
@@ -71,13 +71,7 @@ package ads.pi3.model;
         return complemento;
     }
 
-    public void setDataNascimento(String datanascimento) {
-        this.datanascimento = datanascimento;
-    }
-
-    public String getDataNascimento() {
-        return datanascimento;
-    }
+  
 
   
 }
