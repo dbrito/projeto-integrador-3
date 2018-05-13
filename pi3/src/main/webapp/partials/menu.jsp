@@ -10,7 +10,7 @@
                 </li>
                 <ul class="sub-menu collapse" id="loja">
                     <li><a href="./cadastrar-filial">Cadastrar Loja</a></li>
-                    <li><a href="#">Gerenciar Lojas</a></li>
+                    <li><a href="./filiais">Gerenciar Lojas</a></li>
                 </ul>
                 
                 <li data-toggle="collapse" data-target="#produto" class="collapsed">

@@ -24,7 +24,7 @@ public class FilialDAO {
         try {
             // Inserindo os valores para o Banco com o parâmetro.
             stmt = con.prepareStatement("INSERT INTO filial (nomeFilial, endereco, numero, cidade, estado) VALUES(?,?,?,?,?)");
-            // passando os dados para o insert            
+            // Passando os dados para o insert.            
             stmt.setString(1, filial.getNomeFilial());
             stmt.setString(2, filial.getEndereco());
             stmt.setInt(3, filial.getNumero());
@@ -57,12 +57,13 @@ public class FilialDAO {
             //Cria um statement para execução de instruções SQL
             preparedStatement = connection.prepareStatement(sql);
             //Configura os parâmetros do "PreparedStatement"
-            preparedStatement.setString(1, filial.getNomeFilial());
-            preparedStatement.setString(2, filial.getEndereco());
-            preparedStatement.setInt(3, filial.getNumero());
-            preparedStatement.setString(4, filial.getCidade());            
-            preparedStatement.setString(5, filial.getEstado());
-            preparedStatement.setInt(6, filial.getId());
+            preparedStatement.setInt(1, filial.getId());
+            preparedStatement.setString(2, filial.getNomeFilial());
+            preparedStatement.setString(3, filial.getEndereco());
+            preparedStatement.setInt(4, filial.getNumero());
+            preparedStatement.setString(5, filial.getCidade());            
+            preparedStatement.setString(6, filial.getEstado());
+            
             
             //Executa o comando no banco de dados
             preparedStatement.execute();
@@ -181,7 +182,7 @@ public class FilialDAO {
             while (result.next()) {
                 
                 if (listaFiliais == null) {
-                    listaFiliais = new ArrayList<Filial>();
+                    listaFiliais = new ArrayList<>();
                 }
                 
                 //Se a lista não foi inicializada, a inicializa

@@ -25,7 +25,7 @@
             <form action="/cadastrar-filial" method="post" id="formulario">
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label for="nomeFilial">Nome da Filial:</label>
+                        <label for="nomeFilial">Nome:</label>
                         <input type="text" class="form-control" name="nomeFilial" id="nomeFilial" required>
                     </div>
                     <div class="form-group col-md-3">
@@ -35,26 +35,28 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label for="numero">Numero da Filial:</label>
+                        <label for="numero">Número:</label>
                         <input type="number" class="form-control" name="numero" id="numero" required>
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="cidade">Cidade (filial):</label>
+                        <label for="cidade">Cidade:</label>
                         <input type="text" class="form-control" name="cidade" id="cidade" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label for="Estado">Estado (filial):</label>
+                        <label for="Estado">Estado:</label>
                         <input type="text" class="form-control" name="estado" id="estado" required>
                     </div>
                 </div>
+                
+                <input type="submit" class="btn btn-info" value="Salvar">
         </div>
-        <input type="submit" class="btn btn-info" value="Salvar">
+        
         
         <!-- <a href="#" class="btn btn-info" role="button">Cancelar</a> -->
-
-        <script>
+       </form>
+       <script>
             $('#formulario').click(function () {
                 console.log('here')
             })
@@ -74,13 +76,11 @@
                             $('#estado').val('');
                         }
                     }, error: function (err) {
-                        alert('Erro tente novamente mais tarde;')
+                        alert('Erro tente novamente mais tarde')
                     }
                 });
             });
         </script>
     
-        </form>
-
 </body>
 </html>
