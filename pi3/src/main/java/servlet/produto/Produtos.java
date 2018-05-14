@@ -31,5 +31,5 @@ public class Produtos extends HttpServlet {
         request.setAttribute("produtos", teste);        
         RequestDispatcher meuk = request.getRequestDispatcher("./produto/produtos.jsp");
         meuk.forward(request, response);
-    }    
+    }           
 }

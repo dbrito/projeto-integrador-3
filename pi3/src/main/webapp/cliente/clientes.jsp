@@ -33,8 +33,9 @@
                     <tr>
                         <th scope="col">Nome</th>
                         <th scope="col">CPF</th>
-                        <th scope="col">Endereço</th>
-                        <th scope="col">Complemento</th>
+                        <th scope="col">Data de Nascimento</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Telefone</th>
                         <th scope="col">Ações</th>
                     </tr>
                 </thead>
@@ -42,10 +43,10 @@
                     <c:forEach var="clie" items="${clientes}">
                         <tr>
                             <td><c:out value="${clie.getNome()}" /></td>
-                            <td><c:out value="${clie.getCPF()}" /></td>
-                            <td><c:out value="${clie.getEndereco()}" /></td>
-                            <td><c:out value="${clie.getComplemento()}" /></td>
-                          
+                            <td><c:out value="${clie.getCpf()}" /></td>
+                            <td><c:out value="${clie.getDataNascimentoFormatada()}" /></td>
+                            <td><c:out value="${clie.getEmail()}" /></td>
+                            <td><c:out value="${clie.getTelefone()}" /></td>                                                      
                             <td>
                                 <a href="./editar-cliente?id=<c:out value="${clie.getId()}" />" title="Editar"><i class="fa fa-edit fa-lg"></i></a>
                                 <a class="remove-item"href="#" title="Excluir" dt-id="<c:out value="${clie.getId()}" />"><i class="fa fa-trash fa-lg"></i></a>

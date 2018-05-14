@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
 -- Servidor:                     127.0.0.1
--- Versão do servidor:           5.7.19-log - MySQL Community Server (GPL)
--- OS do Servidor:               Win64
+-- Versão do servidor:           10.1.31-MariaDB - mariadb.org binary distribution
+-- OS do Servidor:               Win32
 -- HeidiSQL Versão:              9.5.0.5196
 -- --------------------------------------------------------
 
@@ -24,18 +24,39 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `data_nascimento` date NOT NULL,
   `telefone` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
-  `enabled` bit(1) NOT NULL,
+  `ativo` bit(1) NOT NULL DEFAULT b'1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `cpf_UNIQUE` (`cpf`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela projeto_integrador.cliente: ~3 rows (aproximadamente)
+-- Copiando dados para a tabela projeto_integrador.cliente: ~5 rows (aproximadamente)
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT IGNORE INTO `cliente` (`id`, `cpf`, `nome`, `data_nascimento`, `telefone`, `email`, `enabled`) VALUES
-	(4, '616.959.819-01', 'Steve Stifler', '1990-01-01', '', '', b'1'),
-	(5, '111.131.934-09', 'Paul Finch ', '1991-02-02', '', '', b'1'),
-	(6, '151.162.615-14', 'Fogell Mclovin', '1993-04-04', '', '', b'1');
+INSERT INTO `cliente` (`id`, `cpf`, `nome`, `data_nascimento`, `telefone`, `email`, `ativo`) VALUES
+	(4, '616.959.819-01', 'Steve Stifler', '1990-01-01', '', '', b'0'),
+	(5, '111.131.934-09', 'Paul Finch ', '1991-02-02', '', '', b'0'),
+	(6, '151.162.615-14', 'Fogell Mclovin', '1993-04-04', '', '', b'0'),
+	(7, '0175290458', 'Douglas dos Santos', '1993-08-27', '(11) 98094-0524', 'doug.dbrito@gmail.com', b'1'),
+	(9, '105754', 'Martin Luther King', '1970-08-08', '(11) 98094-0524', 'asdadad@gmail', b'1');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
+
+-- Copiando estrutura para tabela projeto_integrador.filial
+CREATE TABLE IF NOT EXISTS `filial` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(20) NOT NULL,
+  `endereco` varchar(20) NOT NULL,
+  `numero` int(10) NOT NULL,
+  `cidade` varchar(20) NOT NULL,
+  `estado` varchar(20) NOT NULL,
+  `ativo` bit(1) NOT NULL DEFAULT b'1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- Copiando dados para a tabela projeto_integrador.filial: ~1 rows (aproximadamente)
+/*!40000 ALTER TABLE `filial` DISABLE KEYS */;
+INSERT INTO `filial` (`id`, `nome`, `endereco`, `numero`, `cidade`, `estado`, `ativo`) VALUES
+	(1, 'Fast - Iguatemi', 'Avenida Faria Lima', 2466, 'São Paulo', 'SP', b'1'),
+	(2, 'teste', 'teste', 666, 'Salvador', 'BA', b'1');
+/*!40000 ALTER TABLE `filial` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela projeto_integrador.item_venda
 CREATE TABLE IF NOT EXISTS `item_venda` (
@@ -48,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `item_venda` (
 
 -- Copiando dados para a tabela projeto_integrador.item_venda: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `item_venda` DISABLE KEYS */;
-INSERT IGNORE INTO `item_venda` (`id_item_venda`, `id_produto`, `quantidade`, `id_venda`) VALUES
+INSERT INTO `item_venda` (`id_item_venda`, `id_produto`, `quantidade`, `id_venda`) VALUES
 	(11, 24, 1, 16),
 	(12, 25, 3, 16);
 /*!40000 ALTER TABLE `item_venda` ENABLE KEYS */;
@@ -65,14 +86,16 @@ CREATE TABLE IF NOT EXISTS `produto` (
   `ativo` bit(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_produto_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela projeto_integrador.produto: ~3 rows (aproximadamente)
+-- Copiando dados para a tabela projeto_integrador.produto: ~5 rows (aproximadamente)
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
-INSERT IGNORE INTO `produto` (`id`, `nome`, `marca`, `preco`, `quantidade`, `categoria`, `descricao`, `ativo`) VALUES
-	(23, 'Inspiron 14 5000', 'Dell', 2459, 40, 'Notebook', 'Execute melhor suas tarefas em um notebook ultraportátil de 14" cheio de estilo. Repleto de potencial. Assim como você.', b'1'),
-	(24, 'Galaxy J7 Prime', 'Samsung', 879.1199951171875, 29, 'Celular ', 'Produto de excelente qualidade', b'1'),
-	(25, 'JBL GO 3W', 'JBL', 129.89999389648438, 57, 'Caixas de Som', '', b'1');
+INSERT INTO `produto` (`id`, `nome`, `marca`, `preco`, `quantidade`, `categoria`, `descricao`, `ativo`) VALUES
+	(23, 'Inspiron 14 6000', 'Dell', 2459, 40, 'Perfume', 'Execute melhor suas tarefas em um notebook ultraportátil de 14" cheio de estilo. Repleto de potencial. Assim como você.', b'0'),
+	(24, 'Galaxy J7 Prime', 'Samsung', 800, 29, 'Perfume', 'Produto de excelente qualidade', b'1'),
+	(25, 'JBL GO 3W', 'JBL', 150, 57, 'Caixas de Som', '', b'0'),
+	(26, 'teste', 'teste', 50, 50, 'Perfume', 'asdadsasd', b'1'),
+	(27, 'teste ', 'marca teste', 500, 100, 'Perfume', 'asdas a sdas ', b'1');
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela projeto_integrador.venda
@@ -88,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `venda` (
 
 -- Copiando dados para a tabela projeto_integrador.venda: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `venda` DISABLE KEYS */;
-INSERT IGNORE INTO `venda` (`id_venda`, `data_venda`, `id_cliente`) VALUES
+INSERT INTO `venda` (`id_venda`, `data_venda`, `id_cliente`) VALUES
 	(16, '2017-12-09', 5);
 /*!40000 ALTER TABLE `venda` ENABLE KEYS */;
 

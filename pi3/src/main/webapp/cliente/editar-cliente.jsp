@@ -30,19 +30,25 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="cpf">CPF:</label>
-                         <input type="text" class="form-control" name="cpf" id="cpf" value="<c:out value="${clie.getCPF()}" />" required>
-                    </div>
+                        <input type="text" class="form-control" name="cpf" id="cpf" value="<c:out value="${clie.getCpf()}" />" required>
+                    </div>                                        
                 </div>              
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label for="endereco">Endereço:</label>
-                          <input type="text" class="form-control" name="endereco" id="endereco" value="<c:out value="${clie.getEndereco()}" />" required>
+                        <label for="data_nascimento">Data de Nascimento</label>
+                         <input type="text" class="form-control" name="data_nascimento" id="data_nascimento" value="<c:out value="${clie.getDataNascimentoFormatada()}" />" required>
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="complemento">Complemento:</label>
-                        <input type="text" class="form-control" name="complemento" id="complemento" value="<c:out value="${clie.getComplemento()}" />" required>
-                    </div>
-                </div>            
+                        <label for="telefone">Telefone</label>
+                        <input type="text" class="form-control" name="telefone" id="telefone" value="<c:out value="${clie.getTelefone()}" />" required>
+                    </div>                    
+                </div>  
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="email">E-mail</label>
+                         <input type="email" class="form-control" name="email" id="email" value="<c:out value="${clie.getEmail()}" />" required>
+                    </div>                    
+                </div>
                
                 
                 <input type="submit" class="btn btn-info" value="Salvar">            

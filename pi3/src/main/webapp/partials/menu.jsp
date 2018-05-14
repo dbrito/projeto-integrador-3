@@ -42,7 +42,7 @@
                 </li>
                 <ul class="sub-menu collapse" id="venda">
                     <li><a href="./realizar-venda">Realizar Venda</a></li>
-                    <li><a href="./relatorio">Gerar relátorios</a></li>
+                    <li><a href="./relatorio">Relátorios de Vendas</a></li>
                 </ul>
 
                 <li>

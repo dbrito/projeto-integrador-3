@@ -41,14 +41,20 @@
                 </div>              
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label for="endereco">Endereço:</label>
-                         <input type="text" class="form-control" name="endereco" id="endereco" required>
+                        <label for="data_nascimento">Data de Nascimento</label>
+                         <input type="text" class="form-control" name="data_nascimento" id="data_nascimento" required>
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="complemento">Complemento:</label>
-                        <input type="text" class="form-control" name="complemento" id="complemento" required>
+                        <label for="telefone">Telefone</label>
+                        <input type="text" class="form-control" name="telefone" id="telefone">
                     </div>
-                </div>            
+                </div> 
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="email">E-mail</label>
+                         <input type="email" class="form-control" name="email" id="email">
+                    </div>                    
+                </div> 
                
                 <input type="submit" class="btn btn-info" value="Salvar">            
                 <!-- <a href="#" class="btn btn-info" role="button">Cancelar</a> -->
@@ -66,9 +72,9 @@
                             if (status == 'success') {
                                 $('#nome').val('');
                                 $('#cpf').val('');
-                                $('#endereco').val('');
-                                $('#complemento').val('');
-                                                        
+                                $('#data_nascimento').val('');
+                                $('#telefone').val('');
+                                $('#email').val('');                                                                                        
                             }
                         }, error: function (err) {
                             alert('Erro tente novamente mais tarde;')

@@ -9,6 +9,8 @@ import ads.pi3.DAO.ClienteDAO;
 import ads.pi3.model.Cliente;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -47,15 +49,17 @@ public class EditarCliente extends HttpServlet {
             response.sendError(404, "Cliente não encontrado");
             Logger.getLogger(EditarCliente.class.getName()).log(Level.SEVERE, null, ex);
             return;
-        }
-                
-        clie.setNome(request.getParameter("nome"));        
-        clie.setCPF(request.getParameter("cpf"));        
-        clie.setEndereco(request.getParameter("endereco"));         
-        clie.setComplemento(request.getParameter("complemento"));         
-       
+        }                
                      
         try {
+            clie.setNome(request.getParameter("nome"));        
+            clie.setCpf(request.getParameter("cpf"));
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date dataNascimento = sdf.parse(request.getParameter("data_nascimento"));
+            clie.setData_nascimento(dataNascimento);
+            clie.setTelefone(request.getParameter("telefone"));
+            clie.setEmail(request.getParameter("email"));                
+            ClienteDAO.inserir(clie);       
             ClienteDAO.atualizar(clie);
         } catch (Exception ex) {
             response.sendError(503, ex.toString());

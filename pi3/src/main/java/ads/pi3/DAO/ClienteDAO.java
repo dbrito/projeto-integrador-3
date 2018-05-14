@@ -33,59 +33,44 @@ public class ClienteDAO {
         Connection con = ConnectionFactory.getConnetion();
         PreparedStatement stmt = null;
         
-        try {
-            // insert para o banco
-            stmt = con.prepareStatement("INSERT INTO cliente ( nome, cpf, endereco, complemento, ativo) VALUES(?,?,?,?,?)");
-            // passando os dados para o insert            
-            stmt.setString(1, cliente.getNome());
-            stmt.setString(2, cliente.getCPF());
-            stmt.setString(3, cliente.getEndereco());
-            stmt.setString(4, cliente.getComplemento());
-            stmt.setInt(5, 1);
+        try {            
+            stmt = con.prepareStatement("INSERT INTO cliente (cpf, nome, data_nascimento, telefone, email) VALUES(?,?,?,?,?)");            
+            stmt.setString(1, cliente.getCpf());
+            stmt.setString(2, cliente.getNome());
+            java.sql.Date dt = new java.sql.Date(cliente.getDataNascimento().getTime());                        
+            stmt.setDate(3, dt);
+            stmt.setString(4, cliente.getTelefone());
+            stmt.setString(5, cliente.getEmail());                        
             stmt.execute();            
         } catch (SQLException ex) {
             System.out.print(ex);
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             ConnectionFactory.closeConnection(con, stmt);
-        }
-        
- }
+        }        
+    }
     
-    public static void atualizar(Cliente cliente) throws SQLException, Exception {
-        //Monta a string de atualização do cliente no BD, utilizando
-        //prepared statement
-        String sql = "UPDATE cliente SET nome=?, cpf=?, endereco=?, complemento=?"
+    public static void atualizar(Cliente cliente) throws SQLException, Exception {        
+        String sql = "UPDATE cliente SET cpf=?, nome=?, data_nascimento=?, telefone=?, email=?"
             + "WHERE (id=?)";
-        //Conexão para abertura e fechamento
-        Connection connection = null;
-        //Statement para obtenção através da conexão, execução de
-        //comandos SQL e fechamentos
-        PreparedStatement preparedStatement = null;
-        try {
-            //Abre uma conexão com o banco de dados
-            connection = ConnectionFactory.getConnetion();
-            //connection = ConnectionUtils.getConnection();
-            //Cria um statement para execução de instruções SQL
-            preparedStatement = connection.prepareStatement(sql);
-            //Configura os parâmetros do "PreparedStatement"
-            preparedStatement.setString(1, cliente.getNome());
-            preparedStatement.setString(2, cliente.getCPF());
-            preparedStatement.setString(3, cliente.getEndereco());
-            preparedStatement.setString(4, cliente.getComplemento());            
-            preparedStatement.setInt(5, cliente.getId());
-            
-            //Executa o comando no banco de dados
-            preparedStatement.execute();
+        
+        Connection connection = ConnectionFactory.getConnetion();;        
+        PreparedStatement stmt = null;
+        try {                        
+            stmt = connection.prepareStatement(sql);            
+            stmt.setString(1, cliente.getCpf());
+            stmt.setString(2, cliente.getNome());
+            java.sql.Date dt = new java.sql.Date (cliente.getDataNascimento().getTime());                        
+            stmt.setDate(3, dt);            
+            stmt.setString(4, cliente.getTelefone());
+            stmt.setString(5, cliente.getEmail());                        
+            stmt.setInt(6, cliente.getId());                        
+            stmt.execute();
         } finally {
             //Se o statement ainda estiver aberto, realiza seu fechamento
-            if (preparedStatement != null && !preparedStatement.isClosed()) {
-                preparedStatement.close();
-            }
+            if (stmt != null && !stmt.isClosed()) stmt.close();
             //Se a conexão ainda estiver aberta, realiza seu fechamento
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-            }
+            if (connection != null && !connection.isClosed()) connection.close();
         }
     }
      
@@ -134,11 +119,13 @@ public class ClienteDAO {
             while (rs.next()) {                
                 Cliente cliente = new Cliente();
                 cliente.setId(rs.getInt("id"));                
-                cliente.setNome(rs.getString("nome"));
-                cliente.setCPF(rs.getString("cpf"));
-                cliente.setEndereco(rs.getString("endereco"));
-                cliente.setComplemento(rs.getString("complemento"));
-                cliente.setEnabled(rs.getInt("ativo"));
+                cliente.setCpf(rs.getString("cpf"));
+                cliente.setNome(rs.getString("nome"));                
+                Date d = new Date(rs.getTimestamp("data_nascimento").getTime());
+                cliente.setData_nascimento(d);                
+                cliente.setTelefone(rs.getString("telefone"));
+                cliente.setEmail(rs.getString("email"));                
+                cliente.setAtivo(rs.getInt("ativo"));
                 clientes.add(cliente);
             }
         } catch (SQLException ex) {
@@ -164,7 +151,7 @@ public class ClienteDAO {
         //que possuem a coluna de ativação de clientes configurada com
         //o valor correto ("enabled" com "true")
         String sql = "SELECT * FROM cliente WHERE ((UPPER(nome) LIKE UPPER(?) "
-            + "OR UPPER(cpf) LIKE UPPER(?) OR UPPER(endereco) LIKE UPPER(?)) AND enabled=1)";
+            + "OR UPPER(cpf) LIKE UPPER(?) OR UPPER(email) LIKE UPPER(?)) AND enabled=1)";
         //Lista de clientes de resultado
         List<Cliente> listaClientes = null;
         //Conexão para abertura e fechamento
@@ -194,12 +181,14 @@ public class ClienteDAO {
                 }
                 //Cria uma instância de Cliente e popula com os valores do BD
                 Cliente cliente = new Cliente();
-                cliente.setId(result.getInt("id"));
+                cliente.setId(result.getInt("id"));                
+                cliente.setCpf(result.getString("cpf"));
                 cliente.setNome(result.getString("nome"));
-                cliente.setCPF(result.getString("cpf"));
-                cliente.setEndereco(result.getString("endereco"));
-                cliente.setComplemento(result.getString("complemento"));
-                cliente.setEnabled(result.getInt("enabled"));
+                Date d = new Date(result.getTimestamp("data_nascimento").getTime());
+                cliente.setData_nascimento(d);                
+                cliente.setTelefone(result.getString("telefone"));
+                cliente.setEmail(result.getString("email"));                
+                cliente.setAtivo(result.getInt("ativo"));
                 //Adiciona a instância na lista
                 listaClientes.add(cliente);
             }
@@ -248,12 +237,14 @@ public class ClienteDAO {
             if (result.next()) {                
                 //Cria uma instância de Cliente e popula com os valores do BD
                 Cliente cliente = new Cliente();
-                cliente.setId(result.getInt("id"));
+                cliente.setId(result.getInt("id"));                
+                cliente.setCpf(result.getString("cpf"));
                 cliente.setNome(result.getString("nome"));
-                cliente.setCPF(result.getString("cpf"));                
-                cliente.setEndereco(result.getString("endereco"));
-                cliente.setComplemento(result.getString("complemento"));
-                cliente.setEnabled(result.getInt("ativo"));                
+                Date d = new Date(result.getTimestamp("data_nascimento").getTime());
+                cliente.setData_nascimento(d);                
+                cliente.setTelefone(result.getString("telefone"));
+                cliente.setEmail(result.getString("email"));                
+                cliente.setAtivo(result.getInt("ativo"));
                 //Retorna o resultado
                 return cliente;
             }            

@@ -5,6 +5,9 @@
  */
 package ads.pi3.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  * @author ninck
@@ -13,32 +16,42 @@ package ads.pi3.model;
     
 
     //Atributos
-    private Integer enabled;
+    private Integer ativo;
     private Integer id;
-    private String nome;
     private String cpf;
-    private String endereco;
-    private String complemento;
+    private String nome;
+    private Date dataNascimento;
+    private String telefone;
+    private String email;
 
 
 
     
     //Métodos de acesso
-    public int getId() {
+    public Integer getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Integer ativo) {
+        this.ativo = ativo;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
-    
-    public Integer getEnabled() {
-        return enabled;
+
+    public String getCpf() {
+        return cpf;
     }
-    public void setEnabled(Integer enabled) {
-        this.enabled = enabled;
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
-    
+
     public String getNome() {
         return nome;
     }
@@ -47,33 +60,35 @@ package ads.pi3.model;
         this.nome = nome;
     }
 
-    public String getCPF() {
-        return cpf;
+    public Date getDataNascimento() {
+        return dataNascimento;
+    }
+    
+    public String getDataNascimentoFormatada() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");        
+        return sdf.format(dataNascimento);
     }
 
-    public void setCPF(String cpf) {
-        this.cpf = cpf;
+    public void setData_nascimento(Date data_nascimento) {
+        this.dataNascimento = data_nascimento;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
-    public void setComplemento(String complemento) {
-        this.complemento = complemento;
+    public String getEmail() {
+        return email;
     }
 
-    public String getComplemento() {
-        return complemento;
+    public void setEmail(String email) {
+        this.email = email;
     }
-
-  
-
-  
+    
 }
 
    
