@@ -29,7 +29,7 @@ public class Produtos extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                
         List<Produto> teste = ProdutoDAO.listar();                
         request.setAttribute("produtos", teste);        
-        RequestDispatcher meuk = request.getRequestDispatcher("produtos.jsp");
+        RequestDispatcher meuk = request.getRequestDispatcher("./produto/produtos.jsp");
         meuk.forward(request, response);
     }    
 }

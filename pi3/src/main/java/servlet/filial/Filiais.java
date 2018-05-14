@@ -26,7 +26,7 @@ public class Filiais extends HttpServlet {
     req.setAttribute("filiais", listar);
     
     //Seta na filial o objeto.
-    RequestDispatcher listaFiliais = req.getRequestDispatcher("filiais.jsp");
+    RequestDispatcher listaFiliais = req.getRequestDispatcher("./filial/filiais.jsp");
     
     
     

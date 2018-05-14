@@ -23,7 +23,7 @@ public class CadastrarUsuario extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {         
-        RequestDispatcher meuk = request.getRequestDispatcher("cadastrar-usuario.jsp");
+        RequestDispatcher meuk = request.getRequestDispatcher("./usuario/cadastrar-usuario.jsp");
         meuk.forward(request, response);
     }
 

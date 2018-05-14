@@ -35,7 +35,7 @@ public class EditarUsuario extends HttpServlet {
             Logger.getLogger(EditarUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
         request.setAttribute("user", user);
-        RequestDispatcher meuk = request.getRequestDispatcher("editar-usuario.jsp");
+        RequestDispatcher meuk = request.getRequestDispatcher("./usuario/editar-usuario.jsp");
         meuk.forward(request, response);                                        
     }
     

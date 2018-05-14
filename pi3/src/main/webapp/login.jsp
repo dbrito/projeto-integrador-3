@@ -18,8 +18,7 @@
             <%@include file="./css/login.css" %>
         </style>
     </head>
-    <body>
-        <img src="<c:url value="./img/bg.jpg"/>"/>
+    <body>        
         <div class="container text-center">
             <div style="width: 100%;max-width:400px; float: none; position:absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                 <div class="account-wall">

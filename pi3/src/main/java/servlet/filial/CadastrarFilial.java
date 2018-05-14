@@ -18,7 +18,7 @@ public class CadastrarFilial extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         
-        RequestDispatcher pegar = req.getRequestDispatcher("cadastrar-filial.jsp");
+        RequestDispatcher pegar = req.getRequestDispatcher("./filial/cadastrar-filial.jsp");
         pegar.forward(req, resp);
         
     }
@@ -27,7 +27,7 @@ public class CadastrarFilial extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     
     Filial filial = new Filial();
-    filial.setNomeFilial(req.getParameter("nomeFilial"));
+    filial.setNome(req.getParameter("nome"));
     filial.setEndereco(req.getParameter("endereco"));
     filial.setNumero(Integer.parseInt(req.getParameter("numero")));
     filial.setCidade(req.getParameter("cidade"));
@@ -36,7 +36,7 @@ public class CadastrarFilial extends HttpServlet {
     FilialDAO.inserir(filial);
     
     PrintWriter resposta = resp.getWriter();
-        resposta.println("A filial '" + filial.getNomeFilial() + "' foi cadastrado com sucesso.");
+        resposta.println("A filial '" + filial.getNome() + "' foi cadastrado com sucesso.");
     
     
     }

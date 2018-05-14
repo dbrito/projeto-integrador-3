@@ -14,7 +14,7 @@
         <title>Gerenciamento de Clientes</title>
 
         <style>
-            <%@include file="./css/geral.css" %>
+            <%@include file="../css/geral.css" %>
         </style>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" >
@@ -24,7 +24,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <%@include file="./partials/menu.jsp" %>
+        <%@include file="../partials/menu.jsp" %>
 
         <div class="content">
             <h1><i class="fa fa-edit fa-lg"></i> Gerenciar Clientes</h1>

@@ -26,7 +26,7 @@ public class CadastrarProduto extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {         
-        RequestDispatcher meuk = request.getRequestDispatcher("cadastrar-produto.jsp");
+        RequestDispatcher meuk = request.getRequestDispatcher("./produto/cadastrar-produto.jsp");
         meuk.forward(request, response);
     }
 

@@ -27,7 +27,7 @@ public class CadastrarCliente extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {         
-        RequestDispatcher meuk = request.getRequestDispatcher("cadastrar-cliente.jsp");
+        RequestDispatcher meuk = request.getRequestDispatcher("./cliente/cadastrar-cliente.jsp");
         meuk.forward(request, response);
     }
 

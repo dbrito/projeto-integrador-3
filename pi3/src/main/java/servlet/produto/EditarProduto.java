@@ -27,6 +27,7 @@ public class EditarProduto extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
+        Logger.getLogger(EditarProduto.class.getName()).log(Level.SEVERE, null, "TESTE EDITAR PRODUTO");
         Produto prod = null;
         try {        
             prod = ProdutoDAO.obter(Integer.parseInt(request.getParameter("id")));
@@ -35,7 +36,7 @@ public class EditarProduto extends HttpServlet {
             Logger.getLogger(EditarProduto.class.getName()).log(Level.SEVERE, null, ex);
         }
         request.setAttribute("prod", prod);
-        RequestDispatcher meuk = request.getRequestDispatcher("editar-produto.jsp");
+        RequestDispatcher meuk = request.getRequestDispatcher("./produto/editar-produto.jsp");
         meuk.forward(request, response);                                        
     }
     

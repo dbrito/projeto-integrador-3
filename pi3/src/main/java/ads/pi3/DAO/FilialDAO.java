@@ -12,8 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FilialDAO {
-
-    private static int totalProdutos = 0;
+    
     private static List<Filial> listaFiliais = new ArrayList<Filial>();
     
     // Iniciando a conexão com o banco.
@@ -23,9 +22,9 @@ public class FilialDAO {
         
         try {
             // Inserindo os valores para o Banco com o parâmetro.
-            stmt = con.prepareStatement("INSERT INTO filial (nomeFilial, endereco, numero, cidade, estado) VALUES(?,?,?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO filial (nome, endereco, numero, cidade, estado) VALUES(?,?,?,?,?)");
             // Passando os dados para o insert.            
-            stmt.setString(1, filial.getNomeFilial());
+            stmt.setString(1, filial.getNome());
             stmt.setString(2, filial.getEndereco());
             stmt.setInt(3, filial.getNumero());
             stmt.setString(4, filial.getCidade());
@@ -33,7 +32,7 @@ public class FilialDAO {
             stmt.execute();            
         } catch (SQLException ex) {
             System.out.print(ex);
-            Logger.getLogger(ProdutoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FilialDAO.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             ConnectionFactory.closeConnection(con, stmt);
         }
@@ -43,7 +42,7 @@ public class FilialDAO {
     public static void atualizar(Filial filial) throws SQLException, Exception {
         //Monta a string de atualização do cliente no BD, utilizando
         //prepared statement
-        String sql = "UPDATE produto SET nomeFilial=?, endereco=?, numero=?, cidade=?, estado=? "
+        String sql = "UPDATE filial SET nome=?, endereco=?, numero=?, cidade=?, estado=? "
             + "WHERE (id=?)";
         //Conexão para abertura e fechamento
         Connection connection = null;
@@ -57,12 +56,13 @@ public class FilialDAO {
             //Cria um statement para execução de instruções SQL
             preparedStatement = connection.prepareStatement(sql);
             //Configura os parâmetros do "PreparedStatement"
-            preparedStatement.setInt(1, filial.getId());
-            preparedStatement.setString(2, filial.getNomeFilial());
-            preparedStatement.setString(3, filial.getEndereco());
-            preparedStatement.setInt(4, filial.getNumero());
-            preparedStatement.setString(5, filial.getCidade());            
-            preparedStatement.setString(6, filial.getEstado());
+            
+            preparedStatement.setString(1, filial.getNome());
+            preparedStatement.setString(2, filial.getEndereco());
+            preparedStatement.setInt(3, filial.getNumero());
+            preparedStatement.setString(4, filial.getCidade());            
+            preparedStatement.setString(5, filial.getEstado());
+            preparedStatement.setInt(6, filial.getId());
             
             
             //Executa o comando no banco de dados
@@ -82,7 +82,7 @@ public class FilialDAO {
     public static void excluir(int id) throws SQLException, Exception {
         //Monta a string de atualização do cliente no BD, utilizando
         //prepared statement
-        String sql = "UPDATE produto SET ativo=0 WHERE (id=?)";
+        String sql = "UPDATE filial SET ativo=0 WHERE (id=?)";
         //Conexão para abertura e fechamento
         Connection connection = null;
         //Statement para obtenção através da conexão, execução de
@@ -110,7 +110,7 @@ public class FilialDAO {
         }
     }
      
-    // listar os produtos
+    // listar as filiais
     public static List <Filial>  listar (){
         Connection con = ConnectionFactory.getConnetion();
         PreparedStatement stmt = null;
@@ -119,12 +119,12 @@ public class FilialDAO {
         List<Filial> filiais = new ArrayList<>();
         
         try {
-            stmt = con.prepareStatement("SELECT * FROM filial");
+            stmt = con.prepareStatement("SELECT * FROM filial where ativo=1");
             rs = stmt.executeQuery();
             while (rs.next()) {                
                 Filial filial = new Filial();
                 filial.setId(rs.getInt("id"));                
-                filial.setNomeFilial(rs.getString("nomeFilial"));
+                filial.setNome(rs.getString("nome"));
                 filial.setEndereco(rs.getString("endereco"));
                 filial.setNumero(rs.getInt("numero"));
                 filial.setCidade(rs.getString("cidade"));
@@ -135,7 +135,7 @@ public class FilialDAO {
         } catch (SQLException ex) {
             System.out.print("Não foi possivel listar!");
             ex.printStackTrace();
-            Logger.getLogger(ProdutoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FilialDAO.class.getName()).log(Level.SEVERE, null, ex);
             //JOptionPane.showMessageDialog(, "");
             
         }finally{
@@ -155,7 +155,7 @@ public class FilialDAO {
         //parâmetro). Além disso, também considera apenas os elementos
         //que possuem a coluna de ativação de clientes configurada com
         //o valor correto ("enabled" com "true")
-        String sql = "SELECT * FROM filial WHERE ((UPPER(nomeFilial) LIKE UPPER(?) "
+        String sql = "SELECT * FROM filial WHERE ((UPPER(nome) LIKE UPPER(?) "
             + "OR UPPER(id) LIKE UPPER(?) OR UPPER(cidade) LIKE UPPER(?)))";
         //Lista de clientes de resultado
         List<Filial> listaFiliais = null;
@@ -189,7 +189,7 @@ public class FilialDAO {
                 //Cria uma instância de Cliente e popula com os valores do BD
                 Filial filial = new Filial();
                 filial.setId(result.getInt("id"));
-                filial.setNomeFilial(result.getString("nomeFilial"));
+                filial.setNome(result.getString("nome"));
                 filial.setEndereco(result.getString("endereco"));
                 filial.setNumero(result.getInt("numero"));
                 filial.setCidade(result.getString("cidade"));
@@ -245,7 +245,7 @@ public class FilialDAO {
                 //Cria uma instância de Cliente e popula com os valores do BD
                 Filial filial = new Filial();
                 filial.setId(result.getInt("id"));
-                filial.setNomeFilial(result.getString("nomeFilial"));
+                filial.setNome(result.getString("nome"));
                 filial.setEndereco(result.getString("endereco"));                
                 filial.setNumero(result.getInt("numero"));
                 filial.setCidade(result.getString("cidade"));

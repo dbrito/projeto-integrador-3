@@ -8,7 +8,7 @@
         <title>Gerenciamento de Filiais</title>
 
         <style>
-            <%@include file="./css/geral.css" %>
+            <%@include file="../css/geral.css" %>
         </style>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" >
@@ -18,7 +18,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <%@include file="./partials/menu.jsp" %>
+        <%@include file="../partials/menu.jsp" %>
 
         <div class="content">
             <h1><i class="fa fa-edit fa-lg"></i> Gerenciar Filiais</h1>
@@ -31,7 +31,7 @@
                         <th scope="col">Número</th>
                         <th scope="col">Cidade</th>
                         <th scope="col">Estado</th>
-                        
+                        <th scope="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,7 +39,7 @@
                     
                         <tr>
                             <td><c:out value="${filial.getId()}" /></td>
-                            <td><c:out value="${filial.getNomeFilial()}" /></td>
+                            <td><c:out value="${filial.getNome()}" /></td>
                             <td><c:out value="${filial.getEndereco()}" /></td>
                             <td><c:out value="${filial.getNumero()}" /></td>
                             <td><c:out value="${filial.getCidade()}" /></td>
@@ -55,8 +55,8 @@
                     $('.remove-item').click(function (e) {
                         e.preventDefault();        
                         var filial = e.currentTarget;                        
-                        var nomeFilial = filial.parentNode.parentNode.children[0].innerText;
-                        var excluir = confirm('Deseja excluir o produto "'+nomeFilial+'" ?');
+                        var nomeFilial = filial.parentNode.parentNode.children[1].innerText;
+                        var excluir = confirm('Deseja excluir a filial "'+nomeFilial+'" ?');
                         if(!excluir) return;
                                 
                         window.currentProd = filial;
@@ -64,7 +64,7 @@
                             type: "POST",
                             url: './excluir-filial',
                             
-                            data: {id : filial.getAttribute('pt-id')},
+                            data: {id : filial.getAttribute('dt-id')},
                             success: function (result, status) {
                                 //alert(result);     
                                 $(window.currentProd.parentNode.parentNode).hide();

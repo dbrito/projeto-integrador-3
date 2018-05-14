@@ -35,7 +35,7 @@ public class EditarCliente extends HttpServlet {
             Logger.getLogger(EditarCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
         request.setAttribute("clie", clie);
-        RequestDispatcher meuk = request.getRequestDispatcher("editar-cliente.jsp");
+        RequestDispatcher meuk = request.getRequestDispatcher("./cliente/editar-cliente.jsp");
         meuk.forward(request, response);                                        
     }
     

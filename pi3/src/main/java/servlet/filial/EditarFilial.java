@@ -9,6 +9,8 @@ import ads.pi3.DAO.FilialDAO;
 import ads.pi3.model.Filial;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,41 +21,37 @@ import javax.servlet.http.HttpServletResponse;
 
 
 
-@WebServlet(name="EditarProduto", urlPatterns ={"/editar-filial"})
+@WebServlet(name="EditarFilial", urlPatterns ={"/editar-filial"})
 
 public class EditarFilial extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Filial filial = null;
-        
+        Filial filial = null;        
         try {
-            filial = FilialDAO.obter(Integer.parseInt(req.getParameter("id")));
-            
-        } catch (Exception e) {
+            filial = FilialDAO.obter(Integer.parseInt(req.getParameter("id")));            
+            req.setAttribute("filial", filial);
+            RequestDispatcher pegar = req.getRequestDispatcher("./filial/editar-filial.jsp");
+            pegar.forward(req, resp);    
+        } catch (Exception ex) {
+            Logger.getLogger(EditarFilial.class.getName()).log(Level.SEVERE, null, ex);
             resp.sendError(404,"Filial não encontrada");
-        }
-        
-        req.setAttribute("filial", filial);
-        RequestDispatcher pegar = req.getRequestDispatcher("editar-filial.jsp");
-        pegar.forward(req, resp);
-    
+        }                
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {    
         Filial filial = null;
         
         try {
-            filial = FilialDAO.obter(Integer.parseInt("id"));
-        } catch (Exception e) {
-            resp.sendError(404, "Filial não encontrada");
+            filial = FilialDAO.obter(Integer.parseInt(req.getParameter("id")));            
+        } catch (Exception e) {            
+            resp.sendError(404, "Filial nao encontrada.");
             return;
         }
     
-        filial.setNomeFilial(req.getParameter("nomeFilial"));
+        filial.setNome(req.getParameter("nome"));
         filial.setEndereco(req.getParameter("endereco"));
         filial.setNumero(Integer.parseInt(req.getParameter("numero")));
         filial.setCidade(req.getParameter("cidade"));
@@ -62,12 +60,12 @@ public class EditarFilial extends HttpServlet {
         try {
             FilialDAO.atualizar(filial);
         } catch (Exception e) {
-            resp.sendError(503, "Erro ao tentar atualizar!");
+            resp.sendError(503, e.getMessage());
             return;
         }
         
         PrintWriter resposta = resp.getWriter();
-        resposta.println("A filial '" + filial.getNomeFilial() + "' foi atualizada com sucesso.");
+        resposta.println("A filial '" + filial.getNome() + "' foi atualizada com sucesso.");
     }
     
     

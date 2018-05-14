@@ -3,7 +3,7 @@ package ads.pi3.model;
 public class Filial {
 
 private int id;
-private String nomeFilial;
+private String nome;
 private String endereco;
 private int numero;
 private String cidade;
@@ -17,12 +17,12 @@ private String estado;
         this.id = id;
     }
 
-    public String getNomeFilial() {
-        return nomeFilial;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNomeFilial(String nomeFilial) {
-        this.nomeFilial = nomeFilial;
+    public void setNome(String nomeFilial) {
+        this.nome = nomeFilial;
     }
 
     public String getEndereco() {
@@ -56,9 +56,5 @@ private String estado;
     public void setEstado(String estado) {
         this.estado = estado;
     }
-
-
-
-
     
 }
