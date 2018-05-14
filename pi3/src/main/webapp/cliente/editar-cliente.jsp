@@ -26,21 +26,21 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="nome">Nome:</label>
-                        <input type="text" class="form-control" name="nome" id="nome" required>
+                        <input type="text" class="form-control" name="nome" id="nome" value="<c:out value="${clie.getNome()}" />" required>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="cpf">CPF:</label>
-                        <input type="text" class="form-control" name="cpf" id="cpf" required>
+                         <input type="text" class="form-control" name="cpf" id="cpf" value="<c:out value="${clie.getCPF()}" />" required>
                     </div>
                 </div>              
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="endereco">Endereço:</label>
-                         <input type="text" class="form-control" name="endereco" id="endereco" required>
+                          <input type="text" class="form-control" name="endereco" id="endereco" value="<c:out value="${clie.getEndereco()}" />" required>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="complemento">Complemento:</label>
-                        <input type="text" class="form-control" name="complemento" id="complemento" required>
+                        <input type="text" class="form-control" name="complemento" id="complemento" value="<c:out value="${clie.getComplemento()}" />" required>
                     </div>
                 </div>            
                
