@@ -61,14 +61,14 @@
                         var excluir = confirm('Deseja excluir o cliente "'+nomeCliente+'" ?');
                         if(!excluir) return;
                                 
-                        window.currentClie = clie;
+                        window.currentUser = clie;
                         $.ajax({
                             type: "POST",
                             url: './excluir-cliente',
                             data: {id : clie.getAttribute('dt-id')},
                             success: function (result, status) {
                                 //alert(result);     
-                                $(window.currentclie.parentNode.parentNode).hide();
+                                $(window.currentUser.parentNode.parentNode).hide();
                             }, error: function (err) {
                                 alert('Erro tente novamente mais tarde;')
                             }
