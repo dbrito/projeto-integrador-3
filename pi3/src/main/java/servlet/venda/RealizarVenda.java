@@ -7,13 +7,19 @@ package servlet.venda;
 
 import ads.pi3.DAO.ClienteDAO;
 import ads.pi3.DAO.ProdutoDAO;
+import ads.pi3.DAO.VendaDAO;
 import ads.pi3.model.Cliente;
+import ads.pi3.model.ItemVenda;
 import ads.pi3.model.Produto;
+import ads.pi3.model.Venda;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -42,16 +48,36 @@ public class RealizarVenda extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                                 
-        JSONObject json = new JSONObject(request.getParameter("jsonData"));
-        System.out.println(json.get("produtos"));        
-        JSONArray produtos = (JSONArray) json.get("produtos");
-        for(int n = 0; n < produtos.length(); n++) {
-            JSONObject object = produtos.getJSONObject(n);
-            System.out.println(object.get("id") + " " + object.get("preco") + " " + object.get("quantidade"));        
-        }
         
-        PrintWriter resposta = response.getWriter();
-        resposta.println("A venda foi efetuada com sucesso");
+        try {
+            JSONObject json = new JSONObject(request.getParameter("jsonData"));
+            Cliente cliente = ClienteDAO.obter((Integer) json.get("clienteId"));        
+            
+            Venda novaVenda = new Venda();
+            novaVenda.setCliente(cliente);
+            novaVenda.setData(new Date());
+            
+            
+            System.out.println(json.get("produtos"));        
+            JSONArray produtos = (JSONArray) json.get("produtos");
+            for(int n = 0; n < produtos.length(); n++) {                                
+                JSONObject parametrosProduto = produtos.getJSONObject(n);
+                
+                Produto produto = ProdutoDAO.obter(Integer.parseInt((String) parametrosProduto.get("id")));
+                ItemVenda item = new ItemVenda();
+                item.setProduto(produto);
+                item.setQuantidade((Integer) parametrosProduto.get("quantidade"));                                                
+                novaVenda.addItem(item);
+            }
+            VendaDAO.criar(novaVenda);
+            PrintWriter resposta = response.getWriter();
+            resposta.println("A venda foi efetuada com sucesso");
+        } catch (Exception ex) {
+            response.sendError(503, ex.getMessage());
+            Logger.getLogger(RealizarVenda.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        
+        
     }
 
 }

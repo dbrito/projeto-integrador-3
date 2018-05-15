@@ -26,13 +26,14 @@ public class UsuarioDAO {
         
         try {
             // insert para o banco
-            stmt = con.prepareStatement("INSERT INTO usuarios (nome, cpf, user, pass, ativo) VALUES(?,?,?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO usuarios (nome, cpf, user, pass, perfil, ativo) VALUES(?,?,?,?,?,?)");
             // passando os dados para o insert            
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getCpf());
             stmt.setString(3, usuario.getUser());
             stmt.setString(4, usuario.getPass());
-            stmt.setInt(5, 1); 
+            stmt.setString(5, usuario.getPerfil()); 
+            stmt.setInt(6, 1); 
             stmt.execute();            
         } catch (SQLException ex) {
             System.out.print(ex);
@@ -46,7 +47,7 @@ public class UsuarioDAO {
     public static void atualizar(Usuario usuario) throws SQLException, Exception {
         //Monta a string de atualização do cliente no BD, utilizando
         //prepared statement
-        String sql = "UPDATE usuarios SET nome=?, cpf=?, user=?, pass=? "
+        String sql = "UPDATE usuarios SET nome=?, cpf=?, user=?, pass=?, perfil=? "
             + "WHERE (id=?)";
         //Conexão para abertura e fechamento
         Connection connection = null;
@@ -64,7 +65,8 @@ public class UsuarioDAO {
             preparedStatement.setString(2, usuario.getCpf());
             preparedStatement.setString(3, usuario.getUser());
             preparedStatement.setString(4, usuario.getPass());
-            preparedStatement.setInt(5, usuario.getId());
+            preparedStatement.setString(5, usuario.getPerfil());
+            preparedStatement.setInt(6, usuario.getId());
             
             //Executa o comando no banco de dados
             preparedStatement.execute();
@@ -130,6 +132,7 @@ public class UsuarioDAO {
                 usuario.setUser(rs.getString("user"));
                 usuario.setPass(rs.getString("pass"));
                 usuario.setEnabled(rs.getInt("ativo"));
+                usuario.setPerfil(rs.getString("perfil"));
                 usuarios.add(usuario);
             }
         } catch (SQLException ex) {
@@ -155,7 +158,7 @@ public class UsuarioDAO {
         //que possuem a coluna de ativação de clientes configurada com
         //o valor correto ("enabled" com "true")
         String sql = "SELECT * FROM produto WHERE ((UPPER(nome) LIKE UPPER(?) "
-            + "OR UPPER(user) LIKE UPPER(?) OR UPPER(cpf) LIKE UPPER(?)) AND enabled=1)";
+            + "OR UPPER(user) LIKE UPPER(?) OR UPPER(cpf) LIKE UPPER(?)) AND ativo=1)";
         //Lista de clientes de resultado
         List<Usuario> listaUsuarios = null;
         //Conexão para abertura e fechamento
@@ -190,7 +193,8 @@ public class UsuarioDAO {
                 usuario.setCpf(result.getString("cpf"));
                 usuario.setUser(result.getString("user"));
                 usuario.setPass(result.getString("pass"));
-                usuario.setEnabled(result.getInt("enabled"));
+                usuario.setEnabled(result.getInt("ativo"));
+                usuario.setPerfil(result.getString("perfil"));
                 //Adiciona a instância na lista
                 listaUsuarios.add(usuario);
             }
@@ -244,6 +248,7 @@ public class UsuarioDAO {
                 usuario.setCpf(result.getString("cpf"));  
                 usuario.setUser(result.getString("user"));
                 usuario.setPass(result.getString("pass"));   
+                usuario.setPerfil(result.getString("perfil"));   
                 usuario.setEnabled(result.getInt("ativo"));             
                 //Retorna o resultado
                 return usuario;

@@ -17,6 +17,7 @@ public class Usuario {
     private String pass;
     private String nome;
     private String cpf;
+    private String perfil;
     
      public int getId() {
         return id;
@@ -63,5 +64,13 @@ public class Usuario {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+    
+    public String getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(String perfil) {
+        this.perfil = perfil;
     }
 }

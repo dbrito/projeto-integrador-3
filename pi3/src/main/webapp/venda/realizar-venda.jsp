@@ -146,8 +146,9 @@
                     var produto = e.currentTarget;
                     var elementoProduto = produto.parentNode.parentNode.cloneNode(true);
                     var novoBotao = elementoProduto.children[4].children[0];
+                    var quantidade = elementoProduto.children[3].children[0];
                     novoBotao.setAttribute('class', 'remove-item');
-                    novoBotao.setAttribute('title', 'Remover Produto');
+                    quantidade.setAttribute('disabled', 'disabled');
                     novoBotao.children[0].setAttribute('class', 'fa fa-trash fa-lg');
 
                     var produto = {
@@ -220,11 +221,7 @@
                         success: function (result, status) {
                             alert(result);
                             if (status == 'success') {
-                                $('#nome').val('');
-                                $('#marca').val('');
-                                $('#preco').val('');
-                                $('#quantidade').val('');
-                                $('#descricao').val('');
+                                window.location.reload(false);
                             }
                         }, error: function (err) {
                             alert('Erro tente novamente mais tarde;')

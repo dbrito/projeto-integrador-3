@@ -32,7 +32,7 @@
                         <label for="cpf">CPF:</label>
                         <input type="text" class="form-control" name="cpf" id="cpf" value="<c:out value="${user.getCpf()}" />" required>
                     </div>
-                </div>            
+                </div>
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="user">User:</label>
@@ -42,25 +42,34 @@
                         <label for="pass">Senha:</label>
                         <input type="password" class="form-control" name="pass" id="pass" value="<c:out value="${user.getPass()}" />" required>
                     </div>
-                </div>            
-               
-                <input type="submit" class="btn btn-info" value="Salvar">            
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="perfil">Perfil:</label>
+                        <select class="form-control" name="perfil" id="perfil">
+                            <option value="caixa" <c:if test="${user.getPerfil() == 'caixa'}">selected</c:if>>Caixa</option>
+                            <option value="estoquista" <c:if test="${user.getPerfil() == 'estoquista'}">selected</c:if>>Estoquista</option>
+                            <option value="gerente" <c:if test="${user.getPerfil() == 'gerente'}">selected</c:if>>Gerente</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-info" value="Salvar">
                 <a href="./usuarios" class="btn btn-info" role="button">Cancelar</a>
-            </form>       
-            <script>                
-                $("#formulario").submit(function (e) {                                
+            </form>
+            <script>
+                $("#formulario").submit(function (e) {
                     e.preventDefault();
                     $.ajax({
                         type: "POST",
                         url: window.location.href,
                         data: $("#formulario").serialize(),
                         success: function (result, status) {
-                            alert(result);                            
+                            alert(result);
                             window.location.href = './usuarios';
                         }, error: function (err) {
                             alert('Erro tente novamente mais tarde;')
                         }
-                    });                
+                    });
                 });
             </script>
         </div>

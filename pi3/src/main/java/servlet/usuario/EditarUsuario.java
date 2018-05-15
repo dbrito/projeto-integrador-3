@@ -53,6 +53,7 @@ public class EditarUsuario extends HttpServlet {
         user.setCpf(request.getParameter("cpf"));        
         user.setUser(request.getParameter("user"));        
         user.setPass(request.getParameter("pass"));              
+        user.setPerfil(request.getParameter("perfil"));
         try {
             UsuarioDAO.atualizar(user);
         } catch (Exception ex) {

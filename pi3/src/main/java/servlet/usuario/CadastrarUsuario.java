@@ -34,11 +34,12 @@ public class CadastrarUsuario extends HttpServlet {
         novoUser.setCpf(request.getParameter("cpf"));      
         novoUser.setUser(request.getParameter("user"));        
         novoUser.setPass(request.getParameter("pass"));        
+        novoUser.setPerfil(request.getParameter("perfil"));        
                  
         UsuarioDAO.inserir(novoUser);
         
         PrintWriter resposta = response.getWriter();
-        resposta.println("O usuário '" + novoUser.getUser()+ "' foi cadastrado com sucesso.");
+        resposta.println("O usuario '" + novoUser.getUser()+ "' foi cadastrado com sucesso.");
     }
 
 }

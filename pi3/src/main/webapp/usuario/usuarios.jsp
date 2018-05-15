@@ -26,17 +26,19 @@
                 <thead >
                     <tr>
                         <th scope="col">Nome</th>
-                        <th scope="col">CPF</th>
                         <th scope="col">Usuário</th>
+                        <th scope="col">Perfil</th>
+                        <th scope="col">CPF</th>                        
                         <th scope="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="user" items="${usuarios}">
                         <tr>
-                            <td><c:out value="${user.getNome()}" /></td>
-                            <td><c:out value="${user.getCpf()}" /></td>
+                            <td><c:out value="${user.getNome()}" /></td>                            
                             <td><c:out value="${user.getUser()}" /></td>
+                            <td><c:out value="${user.getPerfil()}" /></td>
+                            <td><c:out value="${user.getCpf()}" /></td>
                             <td>
                                 <a href="./editar-usuario?id=<c:out value="${user.getId()}" />" title="Editar"><i class="fa fa-edit fa-lg"></i></a>
                                 <a class="remove-item"href="#" title="Excluir" dt-id="<c:out value="${user.getId()}" />"><i class="fa fa-trash fa-lg"></i></a>

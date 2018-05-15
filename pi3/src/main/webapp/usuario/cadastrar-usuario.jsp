@@ -42,7 +42,17 @@
                         <label for="pass">Senha:</label>
                         <input type="password" class="form-control" name="pass" id="pass" required>
                     </div>
-                </div>            
+                </div> 
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="perfil">Perfil:</label>
+                        <select class="form-control" name="perfil" id="perfil">
+                            <option value="caixa">Caixa</option>
+                            <option value="estoquista">Estoquista</option>
+                            <option value="gerente">Gerente</option>
+                        </select>                        
+                    </div>                    
+                </div> 
                 
                 <input type="submit" class="btn btn-info" value="Salvar">            
                 <!-- <a href="#" class="btn btn-info" role="button">Cancelar</a> -->
