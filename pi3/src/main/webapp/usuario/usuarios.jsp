@@ -25,7 +25,7 @@
             <table class="table table-hover" >
                 <thead >
                     <tr>
-                        <th scope="col">Nomes</th>
+                        <th scope="col">Nome</th>
                         <th scope="col">CPF</th>
                         <th scope="col">Usuário</th>
                         <th scope="col">Ações</th>
