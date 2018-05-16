@@ -7,6 +7,7 @@ package servlet.produto;
 
 import ads.pi3.DAO.ProdutoDAO;
 import ads.pi3.model.Produto;
+import ads.pi3.model.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -26,12 +27,35 @@ public class CadastrarProduto extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {         
+        try {
+            //Caso o usuário não esteja logado redireciono para a tela de login
+            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
+            if (user ==  null) {
+                response.sendRedirect("login");
+                return;
+            }
+            //Caso o usuário esteja loga mas seja um caixa redireciona para a tela de acesso negado
+            else if (user.getPerfil().equals("caixa")){
+                response.sendRedirect(request.getContextPath() + "/acesso-negado.html");
+                return;
+            }
+        } catch(Exception e) {}
+        
         RequestDispatcher meuk = request.getRequestDispatcher("./produto/cadastrar-produto.jsp");
         meuk.forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
+        try {
+            //Caso o usuário não esteja logado ou seja um caixa não permito o cadastro
+            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
+            if (user ==  null || user.getPerfil().equals("caixa")) {
+                response.sendError(403, "Acesso negado");
+                return;
+            }
+        } catch(Exception e) {}
+        
         Produto novoProd = new Produto();
         novoProd.setNome(request.getParameter("nome"));        
         novoProd.setMarca(request.getParameter("marca"));        

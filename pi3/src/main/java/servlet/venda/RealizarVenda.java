@@ -11,6 +11,7 @@ import ads.pi3.DAO.VendaDAO;
 import ads.pi3.model.Cliente;
 import ads.pi3.model.ItemVenda;
 import ads.pi3.model.Produto;
+import ads.pi3.model.Usuario;
 import ads.pi3.model.Venda;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,6 +38,15 @@ public class RealizarVenda extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {         
+        try {
+            //Caso o usuário não esteja logado redireciono para a tela de login
+            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
+            if (user ==  null) {
+                response.sendRedirect("login");
+                return;
+            }            
+        } catch(Exception e) {}
+        
         List<Cliente> clientes = ClienteDAO.listar();                
         request.setAttribute("clientes", clientes);        
         
@@ -48,6 +58,15 @@ public class RealizarVenda extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                                 
+        Usuario user = null;
+        try {
+            //Caso o usuário não esteja logado ou não seja um gerente não permito o cadastro
+            user = (Usuario) request.getSession().getAttribute("funcionario");
+            if (user ==  null) {
+                response.sendError(403, "Acesso negado");
+                return;
+            }
+        } catch(Exception e) {} 
         
         try {
             JSONObject json = new JSONObject(request.getParameter("jsonData"));
@@ -56,9 +75,10 @@ public class RealizarVenda extends HttpServlet {
             Venda novaVenda = new Venda();
             novaVenda.setCliente(cliente);
             novaVenda.setData(new Date());
+            novaVenda.setVendedor(user);
+            novaVenda.setFilial(user.getFilial());
             
-            
-            System.out.println(json.get("produtos"));        
+                        
             JSONArray produtos = (JSONArray) json.get("produtos");
             for(int n = 0; n < produtos.length(); n++) {                                
                 JSONObject parametrosProduto = produtos.getJSONObject(n);

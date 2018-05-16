@@ -31,6 +31,20 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                        
+        
+        try {
+            //Verifico se o usuário já está logado
+            Usuario teste = (Usuario) request.getSession().getAttribute("funcionario");            
+            if (teste !=  null) {
+                //Caso esteja mando para a tela de produtos                
+                if (teste.getPerfil().equals("caixa")) response.sendRedirect("clientes");
+                else response.sendRedirect("produtos");                
+                return;
+            }            
+        } catch(Exception e) {
+            System.out.print(e);
+        }
+        
         RequestDispatcher redir = request.getRequestDispatcher("login.jsp");
         redir.forward(request, response);
     }
@@ -50,8 +64,7 @@ public class Login extends HttpServlet {
         if (usuario == null) {
             response.sendError(500, "Login invalido, verifique o seu usuario e senha.");
             return;
-        }
-        
+        }        
         HttpSession sessao = request.getSession(true);
         sessao.setAttribute("funcionario", usuario);
         

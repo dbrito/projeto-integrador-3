@@ -25,7 +25,7 @@ public class VendaDAO {
     public static void criar(Venda venda) throws SQLException, Exception {
         //Monta a string de inserção de um cliente no BD,
         //utilizando os dados do clientes passados como parâmetro
-        String sql = "INSERT INTO venda (id_cliente, data_venda) VALUES (?, ?)";
+        String sql = "INSERT INTO venda (id_cliente, data_venda, id_vendedor, id_filial) VALUES (?, ?, ?, ?)";
         //Conexão para abertura e fechamento
         Connection connection = null;
         //Statement para obtenção através da conexão, execução de
@@ -40,6 +40,8 @@ public class VendaDAO {
             preparedStatement.setInt(1, venda.getCliente().getId());
             java.sql.Date dt = new java.sql.Date ((new Date()).getTime());
             preparedStatement.setDate(2, dt);
+            preparedStatement.setInt(3, venda.getVendedor().getId());
+            preparedStatement.setInt(4, venda.getFilial().getId());
             preparedStatement.execute();
 
             ResultSet rs = preparedStatement.getGeneratedKeys();
@@ -129,6 +131,9 @@ public class VendaDAO {
                 venda.setId(rs.getInt("id_venda"));
                 venda.setData(d);
                 venda.setCliente(ClienteDAO.obter(rs.getInt("id_cliente")));
+                venda.setVendedor(UsuarioDAO.obter(rs.getInt("id_vendedor")));
+                venda.setFilial(FilialDAO.obter(rs.getInt("id_filial")));
+                
                 List<ItemVenda> itens = pegaItens(venda.getId());
                 for (ItemVenda item : itens) {
                     venda.addItem(item);
@@ -162,6 +167,9 @@ public class VendaDAO {
                 venda.setId(rs.getInt("id_venda"));
                 venda.setData(d);
                 venda.setCliente(ClienteDAO.obter(rs.getInt("id_cliente")));
+                venda.setVendedor(UsuarioDAO.obter(rs.getInt("id_vendedor")));
+                venda.setFilial(FilialDAO.obter(rs.getInt("id_filial")));
+                
                 List<ItemVenda> itens = pegaItens(venda.getId());
                 for (ItemVenda item : itens) {
                     venda.addItem(item);

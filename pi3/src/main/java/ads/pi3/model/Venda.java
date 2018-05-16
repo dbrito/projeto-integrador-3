@@ -18,6 +18,7 @@ public class Venda {
     //Atributos
     private List<ItemVenda> listaItens = new ArrayList<ItemVenda>();
     private Usuario vendedor;
+    private Filial filial;
     private Cliente cliente;
     private Date data;
     private Integer id;
@@ -53,6 +54,14 @@ public class Venda {
 
     public void setVendedor(Usuario vendedor) {
         this.vendedor = vendedor;
+    }
+    
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
     }
     
     public List<ItemVenda> getItens() {

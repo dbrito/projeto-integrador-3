@@ -63,10 +63,12 @@ CREATE TABLE IF NOT EXISTS `item_venda` (
   `id_venda` int(11) NOT NULL,
   `preco` double DEFAULT NULL,
   PRIMARY KEY (`id_item_venda`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 -- Copiando dados para a tabela projeto_integrador.item_venda: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `item_venda` DISABLE KEYS */;
+INSERT INTO `item_venda` (`id_item_venda`, `id_produto`, `quantidade`, `id_venda`, `preco`) VALUES
+	(17, 27, 2, 21, 1000);
 /*!40000 ALTER TABLE `item_venda` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela projeto_integrador.produto
@@ -81,16 +83,17 @@ CREATE TABLE IF NOT EXISTS `produto` (
   `ativo` bit(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_produto_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela projeto_integrador.produto: ~5 rows (aproximadamente)
+-- Copiando dados para a tabela projeto_integrador.produto: ~6 rows (aproximadamente)
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
 INSERT INTO `produto` (`id`, `nome`, `marca`, `preco`, `quantidade`, `categoria`, `descricao`, `ativo`) VALUES
 	(23, 'Inspiron 14 6000', 'Dell', 2459, 40, 'Perfume', 'Execute melhor suas tarefas em um notebook ultraportátil de 14" cheio de estilo. Repleto de potencial. Assim como você.', b'0'),
 	(24, 'Galaxy J7 Prime', 'Samsung', 800, 27, 'Perfume', 'Produto de excelente qualidade', b'1'),
 	(25, 'JBL GO 3W', 'JBL', 150, 57, 'Caixas de Som', '', b'0'),
-	(26, 'teste', 'teste', 50, 42, 'Perfume', 'asdadsasd', b'1'),
-	(27, 'teste ', 'marca teste', 500, 100, 'Perfume', 'asdas a sdas ', b'1');
+	(26, 'teste', 'teste', 50, 42, 'Perfume', 'asdadsasd', b'0'),
+	(27, 'teste  4', 'marca teste', 500, 98, 'Perfume', 'asdas a sdas ', b'1'),
+	(28, 'teste 3', 'asdasd', 44, 55, 'Perfume', 'adasdasd', b'1');
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela projeto_integrador.usuarios
@@ -104,13 +107,16 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `perfil` varchar(50) DEFAULT 'caixa',
   `filial_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela projeto_integrador.usuarios: ~2 rows (aproximadamente)
+-- Copiando dados para a tabela projeto_integrador.usuarios: ~5 rows (aproximadamente)
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
 INSERT INTO `usuarios` (`id`, `nome`, `cpf`, `user`, `pass`, `ativo`, `perfil`, `filial_id`) VALUES
 	(73, 'Silvio Santos', '666', 'admin', 'admin', b'1', 'gerente', 3),
-	(74, 'Eliana', '888', 'eli', 'eli', b'1', 'estoquista', 1);
+	(74, 'Eliana', '888', 'eli', 'eli', b'0', 'estoquista', 1),
+	(75, 'teste', '4523145', 'teste', 'teste', b'1', 'caixa', 1),
+	(76, 'Champs', '45612154', 'estoq', 'estoq', b'1', 'estoquista', 1),
+	(77, 'Skiners Jr', '789', 'skiners', 'skiners', b'1', 'estoquista', 3);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela projeto_integrador.venda
@@ -118,14 +124,18 @@ CREATE TABLE IF NOT EXISTS `venda` (
   `id_venda` int(11) NOT NULL AUTO_INCREMENT,
   `data_venda` date NOT NULL,
   `id_cliente` int(11) DEFAULT NULL,
+  `id_vendedor` int(11) DEFAULT NULL,
+  `id_filial` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_venda`),
   UNIQUE KEY `id_venda_UNIQUE` (`id_venda`),
   KEY `fk_cliente_idx` (`id_cliente`),
   CONSTRAINT `fk_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 -- Copiando dados para a tabela projeto_integrador.venda: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `venda` DISABLE KEYS */;
+INSERT INTO `venda` (`id_venda`, `data_venda`, `id_cliente`, `id_vendedor`, `id_filial`) VALUES
+	(21, '2018-05-16', 7, 73, 3);
 /*!40000 ALTER TABLE `venda` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

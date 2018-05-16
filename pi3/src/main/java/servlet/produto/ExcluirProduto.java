@@ -7,6 +7,7 @@ package servlet.produto;
 
 import ads.pi3.DAO.ProdutoDAO;
 import ads.pi3.model.Produto;
+import ads.pi3.model.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -26,10 +27,16 @@ import javax.servlet.http.HttpServletResponse;
 public class ExcluirProduto extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                         
-        System.out.println("AGORA");
-        request.getParameterMap();
-        System.out.println(request.getParameter("id"));
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                                         
+        try {
+            //Caso o usuário não esteja logado ou seja um caixa não permito o cadastro
+            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
+            if (user ==  null || user.getPerfil().equals("caixa")) {
+                response.sendError(403, "Acesso negado");
+                return;
+            }
+        } catch(Exception e) {}
+        
         try {                    
             ProdutoDAO.excluir(Integer.parseInt(request.getParameter("id")));                                               
         } catch (Exception ex) {

@@ -30,6 +30,20 @@ public class EditarUsuario extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
+        try {
+            //Caso o usuário não esteja logado redireciono para a tela de login
+            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
+            if (user ==  null) {
+                response.sendRedirect("login");
+                return;
+            }
+            //Caso o usuário esteja loga mas não seja um gerente redireciona para a tela de acesso negado
+            else if (!user.getPerfil().equals("gerente")){
+                response.sendRedirect(request.getContextPath() + "/acesso-negado.html");
+                return;
+            }
+        } catch(Exception e) {}
+        
         Usuario user = null;
         List<Filial> filiais = null;
         try {        
@@ -46,6 +60,16 @@ public class EditarUsuario extends HttpServlet {
     }
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
+        try {
+            //Caso o usuário não esteja logado ou não seja um gerente não permito o cadastro
+            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
+            if (user ==  null || !user.getPerfil().equals("gerente")) {
+                response.sendError(403, "Acesso negado");
+                return;
+            }
+        } catch(Exception e) {}
+        
+        
         Usuario user;
         try {        
             user = UsuarioDAO.obter(Integer.parseInt(request.getParameter("id")));

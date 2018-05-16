@@ -27,6 +27,21 @@ public class CadastrarUsuario extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {         
+        try {
+            //Caso o usuário não esteja logado redireciono para a tela de login
+            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
+            if (user ==  null) {
+                response.sendRedirect("login");
+                return;
+            }
+            //Caso o usuário esteja loga mas não seja um gerente redireciona para a tela de acesso negado
+            else if (!user.getPerfil().equals("gerente")){
+                response.sendRedirect(request.getContextPath() + "/acesso-negado.html");
+                return;
+            }
+        } catch(Exception e) {}
+        
+        
         List<Filial> filiais = FilialDAO.listar();
         request.setAttribute("filiais", filiais);
         RequestDispatcher meuk = request.getRequestDispatcher("./usuario/cadastrar-usuario.jsp");
@@ -35,7 +50,15 @@ public class CadastrarUsuario extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
-                        
+        try {
+            //Caso o usuário não esteja logado ou não seja um gerente não permito o cadastro
+            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
+            if (user ==  null || !user.getPerfil().equals("gerente")) {
+                response.sendError(403, "Acesso negado");
+                return;
+            }
+        } catch(Exception e) {}
+        
         try {
             Usuario novoUser = new Usuario();
             novoUser.setNome(request.getParameter("nome"));        

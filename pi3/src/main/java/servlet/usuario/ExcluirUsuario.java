@@ -27,9 +27,15 @@ public class ExcluirUsuario extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                         
-        System.out.println("AGORA");
-        request.getParameterMap();
-        System.out.println(request.getParameter("id"));
+        try {
+            //Caso o usuário não esteja logado ou não seja um gerente não permito o cadastro
+            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
+            if (user ==  null || !user.getPerfil().equals("gerente")) {
+                response.sendError(403, "Acesso negado");
+                return;
+            }
+        } catch(Exception e) {}        
+        
         try {                    
             UsuarioDAO.excluir(Integer.parseInt(request.getParameter("id")));                                               
         } catch (Exception ex) {

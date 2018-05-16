@@ -41,7 +41,7 @@
                     url: window.location.href,
                     data: $("#formulario").serialize(),
                     success: function (result, status) {
-                        window.location.href = './produtos';
+                        window.location.href = './realizar-venda';
                     }, error: function (err) {
                         alert('Erro ao efetuar o login, verifique os seus dados.');
                     }
