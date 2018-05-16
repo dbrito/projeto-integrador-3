@@ -5,10 +5,13 @@
  */
 package servlet.usuario;
 
+import ads.pi3.DAO.FilialDAO;
 import ads.pi3.DAO.UsuarioDAO;
+import ads.pi3.model.Filial;
 import ads.pi3.model.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -28,13 +31,16 @@ public class EditarUsuario extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
         Usuario user = null;
+        List<Filial> filiais = null;
         try {        
             user = UsuarioDAO.obter(Integer.parseInt(request.getParameter("id")));
+            filiais = FilialDAO.listar();
         } catch (Exception ex) {
             response.sendError(404, "Usuário não encontrado");
             Logger.getLogger(EditarUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
         request.setAttribute("user", user);
+        request.setAttribute("filiais", filiais);
         RequestDispatcher meuk = request.getRequestDispatcher("./usuario/editar-usuario.jsp");
         meuk.forward(request, response);                                        
     }
@@ -48,13 +54,17 @@ public class EditarUsuario extends HttpServlet {
             Logger.getLogger(EditarUsuario.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
-                
-        user.setNome(request.getParameter("nome"));        
-        user.setCpf(request.getParameter("cpf"));        
-        user.setUser(request.getParameter("user"));        
-        user.setPass(request.getParameter("pass"));              
-        user.setPerfil(request.getParameter("perfil"));
+                                
         try {
+            user.setNome(request.getParameter("nome"));        
+            user.setCpf(request.getParameter("cpf"));        
+            user.setUser(request.getParameter("user"));        
+            user.setPass(request.getParameter("pass"));              
+            user.setPerfil(request.getParameter("perfil"));
+            Filial filial;
+            filial = FilialDAO.obter(Integer.parseInt(request.getParameter("filial")));
+            user.setFilial(filial);
+            
             UsuarioDAO.atualizar(user);
         } catch (Exception ex) {
             response.sendError(503, ex.toString());
@@ -62,7 +72,7 @@ public class EditarUsuario extends HttpServlet {
         }
         
         PrintWriter resposta = response.getWriter();
-        resposta.println("O usuário '" + user.getNome() + "' foi atualizado com sucesso.");
+        resposta.println("O usuario '" + user.getNome() + "' foi atualizado com sucesso.");
     }
 
 }

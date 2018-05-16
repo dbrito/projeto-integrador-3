@@ -28,17 +28,19 @@
                         <th scope="col">Nome</th>
                         <th scope="col">Usuário</th>
                         <th scope="col">Perfil</th>
-                        <th scope="col">CPF</th>                        
+                        <th scope="col">CPF</th>
+                        <th scope="col">Filial</th>
                         <th scope="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="user" items="${usuarios}">
                         <tr>
-                            <td><c:out value="${user.getNome()}" /></td>                            
+                            <td><c:out value="${user.getNome()}" /></td>
                             <td><c:out value="${user.getUser()}" /></td>
                             <td><c:out value="${user.getPerfil()}" /></td>
                             <td><c:out value="${user.getCpf()}" /></td>
+                            <td><c:out value="${user.getFilial().getNome()}" /></td>
                             <td>
                                 <a href="./editar-usuario?id=<c:out value="${user.getId()}" />" title="Editar"><i class="fa fa-edit fa-lg"></i></a>
                                 <a class="remove-item"href="#" title="Excluir" dt-id="<c:out value="${user.getId()}" />"><i class="fa fa-trash fa-lg"></i></a>
@@ -48,27 +50,27 @@
                 </tbody>
                 <script>
                     $('.remove-item').click(function (e) {
-                        e.preventDefault();        
-                        var user = e.currentTarget;                        
+                        e.preventDefault();
+                        var user = e.currentTarget;
                         var nomeUsuario = user.parentNode.parentNode.children[0].innerText;
                         var excluir = confirm('Deseja excluir o usuário "'+nomeUsuario+'" ?');
                         if(!excluir) return;
-                                
+
                         window.currentUser = user;
                         $.ajax({
                             type: "POST",
                             url: './excluir-usuario',
                             data: {id : user.getAttribute('dt-id')},
                             success: function (result, status) {
-                                //alert(result);     
+                                //alert(result);
                                 $(window.currentUser.parentNode.parentNode).hide();
                             }, error: function (err) {
                                 alert('Erro tente novamente mais tarde;')
                             }
                         });
-                            
+
                     });
-                    
+
                 </script>
             </table>
         </div>

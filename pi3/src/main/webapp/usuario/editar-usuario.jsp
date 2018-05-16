@@ -52,6 +52,18 @@
                             <option value="gerente" <c:if test="${user.getPerfil() == 'gerente'}">selected</c:if>>Gerente</option>
                         </select>
                     </div>
+                    <div class="form-group col-md-3">
+                        <label for="filial">Filial:</label>
+                        <select class="form-control" name="filial" id="filial">
+                            <c:forEach var="fili" items="${filiais}">
+                                <option
+                                    <c:if test="${user.getFilial().getId() == fili.getId()}">selected</c:if>
+                                    value="<c:out value="${fili.getId()}" />">
+                                    <c:out value="${fili.getNome()}" />
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
                 </div>
                 <input type="submit" class="btn btn-info" value="Salvar">
                 <a href="./usuarios" class="btn btn-info" role="button">Cancelar</a>

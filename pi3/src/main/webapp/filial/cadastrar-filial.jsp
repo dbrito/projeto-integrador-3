@@ -49,10 +49,10 @@
                         <input type="text" class="form-control" name="estado" id="estado" required>
                     </div>
                 </div>
-                
-                <input type="submit" class="btn btn-info" value="Salvar">                            
+
+                <input type="submit" class="btn btn-info" value="Salvar">
             </form>
-        </div>                               
+        </div>
         <script>
             $('#formulario').click(function () {
                 console.log('here')
@@ -72,11 +72,12 @@
                             $('#cidade').val('');
                             $('#estado').val('');
                         }
+                        window.location.href = './filiais';
                     }, error: function (err) {
                         alert('Erro tente novamente mais tarde')
                     }
                 });
             });
-        </script>    
+        </script>
     </body>
 </html>

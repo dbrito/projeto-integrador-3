@@ -12,7 +12,7 @@
                     <li><a href="./cadastrar-filial">Cadastrar Loja</a></li>
                     <li><a href="./filiais">Gerenciar Lojas</a></li>
                 </ul>
-                
+
                 <li data-toggle="collapse" data-target="#produto" class="collapsed">
                     <a href="#"><i class="fa fa-shopping-cart fa-lg"></i> Produtos <span class="arrow"></span></a>
                 </li>
@@ -36,7 +36,7 @@
                     <li><a href="./cadastrar-usuario">Cadastrar Usuário</a></li>
                     <li><a href="./usuarios">Gerenciar Usuários</a></li>
                 </ul>
-                
+
                 <li data-toggle="collapse" data-target="#venda" class="collapsed">
                     <a href="#"><i class="fa fa-shopping-cart fa-lg"></i> Vendas <span class="arrow"></span></a>
                 </li>
@@ -49,7 +49,7 @@
                     <a href="#"><i class="fa fa-edit fa-lg"></i> Gerenciar Conta</span></a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-times fa-lg"></i> Sair</span></a>
+                    <a href="./logout"><i class="fa fa-times fa-lg"></i> Sair</span></a>
                 </li>
             </ul>
      </div>

@@ -26,14 +26,15 @@ public class UsuarioDAO {
         
         try {
             // insert para o banco
-            stmt = con.prepareStatement("INSERT INTO usuarios (nome, cpf, user, pass, perfil, ativo) VALUES(?,?,?,?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO usuarios (nome, cpf, user, pass, perfil, filial_id, ativo) VALUES(?,?,?,?,?,?,?)");
             // passando os dados para o insert            
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getCpf());
             stmt.setString(3, usuario.getUser());
             stmt.setString(4, usuario.getPass());
             stmt.setString(5, usuario.getPerfil()); 
-            stmt.setInt(6, 1); 
+            stmt.setInt(6, usuario.getFilial().getId()); 
+            stmt.setInt(7, 1); 
             stmt.execute();            
         } catch (SQLException ex) {
             System.out.print(ex);
@@ -47,8 +48,8 @@ public class UsuarioDAO {
     public static void atualizar(Usuario usuario) throws SQLException, Exception {
         //Monta a string de atualização do cliente no BD, utilizando
         //prepared statement
-        String sql = "UPDATE usuarios SET nome=?, cpf=?, user=?, pass=?, perfil=? "
-            + "WHERE (id=?)";
+        String sql = "UPDATE usuarios SET nome=?, cpf=?, user=?, pass=?, perfil=?, filial_id=?"
+            + " WHERE (id=?)";
         //Conexão para abertura e fechamento
         Connection connection = null;
         //Statement para obtenção através da conexão, execução de
@@ -66,7 +67,8 @@ public class UsuarioDAO {
             preparedStatement.setString(3, usuario.getUser());
             preparedStatement.setString(4, usuario.getPass());
             preparedStatement.setString(5, usuario.getPerfil());
-            preparedStatement.setInt(6, usuario.getId());
+            preparedStatement.setInt(6, usuario.getFilial().getId());
+            preparedStatement.setInt(7, usuario.getId());
             
             //Executa o comando no banco de dados
             preparedStatement.execute();
@@ -114,7 +116,7 @@ public class UsuarioDAO {
     }
      
     // listar os usuarios
-    public static List <Usuario>  listar (){
+    public static List <Usuario>  listar () throws Exception{
         Connection con = ConnectionFactory.getConnetion();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -133,6 +135,7 @@ public class UsuarioDAO {
                 usuario.setPass(rs.getString("pass"));
                 usuario.setEnabled(rs.getInt("ativo"));
                 usuario.setPerfil(rs.getString("perfil"));
+                usuario.setFilial(FilialDAO.obter(rs.getInt("filial_id")));
                 usuarios.add(usuario);
             }
         } catch (SQLException ex) {
@@ -145,76 +148,7 @@ public class UsuarioDAO {
         }
         
         return usuarios;
-    }
-    
-    //Procura um cliente no banco de dados, de acordo com o nome
-    //ou com o sobrenome, passado como parâmetro
-    public static List<Usuario> procurar(String valor) throws SQLException, Exception {
-        //Monta a string de consulta de clientes no banco, utilizando
-        //o valor passado como parâmetro para busca nas colunas de
-        //nome ou sobrenome (através do "LIKE" e ignorando minúsculas
-        //ou maiúsculas, através do "UPPER" aplicado à coluna e ao
-        //parâmetro). Além disso, também considera apenas os elementos
-        //que possuem a coluna de ativação de clientes configurada com
-        //o valor correto ("enabled" com "true")
-        String sql = "SELECT * FROM produto WHERE ((UPPER(nome) LIKE UPPER(?) "
-            + "OR UPPER(user) LIKE UPPER(?) OR UPPER(cpf) LIKE UPPER(?)) AND ativo=1)";
-        //Lista de clientes de resultado
-        List<Usuario> listaUsuarios = null;
-        //Conexão para abertura e fechamento
-        Connection connection = null;
-        //Statement para obtenção através da conexão, execução de
-        //comandos SQL e fechamentos
-        PreparedStatement preparedStatement = null;
-        //Armazenará os resultados do banco de dados
-        ResultSet result = null;
-        try {
-            //Abre uma conexão com o banco de dados
-            connection = ConnectionFactory.getConnetion();
-            //Cria um statement para execução de instruções SQL
-            preparedStatement = connection.prepareStatement(sql);
-            //Configura os parâmetros do "PreparedStatement"
-            preparedStatement.setString(1, "%" + valor + "%");
-            preparedStatement.setString(2, "%" + valor + "%");
-            preparedStatement.setString(3, "%" + valor + "%");   
-            //Executa a consulta SQL no banco de dados
-            result = preparedStatement.executeQuery();
-            
-            //Itera por cada item do resultado
-            while (result.next()) {
-                //Se a lista não foi inicializada, a inicializa
-                if (listaUsuarios == null) {
-                    listaUsuarios = new ArrayList<Usuario>();
-                }
-                //Cria uma instância de Cliente e popula com os valores do BD
-                Usuario usuario = new Usuario();
-                usuario.setId(result.getInt("id"));
-                usuario.setNome(result.getString("nome"));
-                usuario.setCpf(result.getString("cpf"));
-                usuario.setUser(result.getString("user"));
-                usuario.setPass(result.getString("pass"));
-                usuario.setEnabled(result.getInt("ativo"));
-                usuario.setPerfil(result.getString("perfil"));
-                //Adiciona a instância na lista
-                listaUsuarios.add(usuario);
-            }
-        } finally {
-            //Se o result ainda estiver aberto, realiza seu fechamento
-            if (result != null && !result.isClosed()) {
-                result.close();
-            }
-            //Se o statement ainda estiver aberto, realiza seu fechamento
-            if (preparedStatement != null && !preparedStatement.isClosed()) {
-                preparedStatement.close();
-            }
-            //Se a conexão ainda estiver aberta, realiza seu fechamento
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-            }
-        }
-        //Retorna a lista de clientes do banco de dados
-        return listaUsuarios;        
-    }    
+    }        
     
     public static Usuario obter(int id) throws SQLException, Exception {
         //Compõe uma String de consulta que considera apenas o cliente
@@ -249,12 +183,12 @@ public class UsuarioDAO {
                 usuario.setUser(result.getString("user"));
                 usuario.setPass(result.getString("pass"));   
                 usuario.setPerfil(result.getString("perfil"));   
+                usuario.setFilial(FilialDAO.obter(result.getInt("filial_id")));   
                 usuario.setEnabled(result.getInt("ativo"));             
                 //Retorna o resultado
                 return usuario;
             }            
-        } finally {
-            //Se o result ainda estiver aberto, realiza seu fechamento
+        } finally {            
             if (result != null && !result.isClosed()) {
                 result.close();
             }
@@ -271,6 +205,41 @@ public class UsuarioDAO {
         //Se chegamos aqui, o "return" anterior não foi executado porque
         //a pesquisa não teve resultados
         //Neste caso, não há um elemento a retornar, então retornamos "null"
+        return null;
+    }
+    
+    public static Usuario efetuarLogin(String user, String pass) throws SQLException, Exception {        
+        String sql = "SELECT * FROM usuarios WHERE (user=?) and (pass=?) and ativo=1";
+        
+        Connection connection = ConnectionFactory.getConnetion();        
+        PreparedStatement preparedStatement = null;        
+        ResultSet result = null;
+        try {            
+            preparedStatement = connection.prepareStatement(sql);            
+            preparedStatement.setString(1, user);            
+            preparedStatement.setString(2, pass);                                    
+            result = preparedStatement.executeQuery();            
+            //Verifica se há pelo menos um resultado
+            if (result.next()) {                
+                //Cria uma instância de Cliente e popula com os valores do BD
+                Usuario usuario = new Usuario();
+                usuario.setId(result.getInt("id"));
+                usuario.setNome(result.getString("nome"));
+                usuario.setCpf(result.getString("cpf"));  
+                usuario.setUser(result.getString("user"));
+                usuario.setPass(result.getString("pass"));   
+                usuario.setPerfil(result.getString("perfil"));   
+                usuario.setFilial(FilialDAO.obter(result.getInt("filial_id")));   
+                usuario.setEnabled(result.getInt("ativo"));             
+                //Retorna o resultado
+                return usuario;
+            }            
+        } finally {            
+            if (result != null && !result.isClosed()) result.close();            
+            if (preparedStatement != null && !preparedStatement.isClosed()) preparedStatement.close();            
+            if (connection != null && !connection.isClosed()) connection.close();
+        }
+        
         return null;
     }
 }

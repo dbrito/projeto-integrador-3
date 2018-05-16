@@ -5,11 +5,15 @@
  */
 package servlet.usuario;
 
+import ads.pi3.DAO.FilialDAO;
 import ads.pi3.DAO.UsuarioDAO;
+import ads.pi3.model.Filial;
 import ads.pi3.model.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,23 +27,34 @@ public class CadastrarUsuario extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {         
+        List<Filial> filiais = FilialDAO.listar();
+        request.setAttribute("filiais", filiais);
         RequestDispatcher meuk = request.getRequestDispatcher("./usuario/cadastrar-usuario.jsp");
         meuk.forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
-        Usuario novoUser = new Usuario();
-        novoUser.setNome(request.getParameter("nome"));        
-        novoUser.setCpf(request.getParameter("cpf"));      
-        novoUser.setUser(request.getParameter("user"));        
-        novoUser.setPass(request.getParameter("pass"));        
-        novoUser.setPerfil(request.getParameter("perfil"));        
-                 
-        UsuarioDAO.inserir(novoUser);
+                        
+        try {
+            Usuario novoUser = new Usuario();
+            novoUser.setNome(request.getParameter("nome"));        
+            novoUser.setCpf(request.getParameter("cpf"));      
+            novoUser.setUser(request.getParameter("user"));        
+            novoUser.setPass(request.getParameter("pass"));        
+            novoUser.setPerfil(request.getParameter("perfil"));        
+            Filial filial;
+            filial = FilialDAO.obter(Integer.parseInt(request.getParameter("filial")));
+            novoUser.setFilial(filial);
+            UsuarioDAO.inserir(novoUser);
+            PrintWriter resposta = response.getWriter();
+            resposta.println("O usuario '" + novoUser.getUser()+ "' foi cadastrado com sucesso.");
+        } catch (Exception ex) {
+            response.sendError(500, "Erro ao cadastrar o usuario");
+            Logger.getLogger(CadastrarUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
         
-        PrintWriter resposta = response.getWriter();
-        resposta.println("O usuario '" + novoUser.getUser()+ "' foi cadastrado com sucesso.");
     }
 
 }

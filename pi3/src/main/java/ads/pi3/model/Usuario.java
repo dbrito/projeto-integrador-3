@@ -18,6 +18,7 @@ public class Usuario {
     private String nome;
     private String cpf;
     private String perfil;
+    private Filial filial;
     
      public int getId() {
         return id;
@@ -72,5 +73,13 @@ public class Usuario {
 
     public void setPerfil(String perfil) {
         this.perfil = perfil;
+    }
+    
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
     }
 }
