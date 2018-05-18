@@ -27,6 +27,9 @@
                         <form id="formulario" class="form-signin" action="./login" method="post">
                             <input type="text" id="user" name="user" class="form-control" placeholder="Usuário" required autofocus>
                             <input type="password" id="pass" name="pass" class="form-control" placeholder="Senha" required>
+                            <div class="alert alert-danger" role="alert" style="display:none;">
+                                Usuário ou senha inválidos
+                            </div>
                             <input type="submit" class="btn btn-lg btn-default btn-block" value="Entrar" />
                         </form>
                     </div>
@@ -35,6 +38,7 @@
         </div>
         <script>
             $("#formulario").submit(function (e) {
+                $('.btn-default').val('Entrando...');
                 e.preventDefault();
                 $.ajax({
                     type: "POST",
@@ -43,7 +47,9 @@
                     success: function (result, status) {
                         window.location.href = './realizar-venda';
                     }, error: function (err) {
-                        alert('Erro ao efetuar o login, verifique os seus dados.');
+                        $('.alert').show();
+                        $('.btn-default').val('Entrar');
+                        //alert('Erro ao efetuar o login, verifique os seus dados.');
                     }
                 });
             });

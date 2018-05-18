@@ -5,12 +5,11 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Realizar Venda</title>
+        <title>Relatórios</title>
 
         <style>
-            <%@include file="../css/geral.css" %>
+            <%@include file="./css/geral.css" %>
         </style>
-
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" >
 
@@ -19,10 +18,10 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <%@include file="../partials/menu.jsp" %>
+        <%@include file="./partials/menu.jsp" %>
 
         <div class="content">
-            <h1><i class="fa fa-shopping-cart fa-lg"></i> Realizar Venda</h1>
+            <h1><i class="fa fa-list fa-lg"></i> Relatórios</h1>
             <form action="/realizar-venda" method="post" id="formulario">
                 <div class="row">
                     <div class="form-group col-md-8">
@@ -33,22 +32,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-10">
-                        Produtos
-                        <table class="table table-hover col-md-6 lista-produtos" style="width: 100%;">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Nome</th>
-                                    <th scope="col">Preço</th>
-                                    <th scope="col">Categoria</th>
-                                    <th scope="col">Quantidade</th>
-                                    <th scope="col">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
+                    <div class="form-group col-md-10">                        
+                        
                         <strong id="total-compra">Total: R$</strong>
                     </div>
                 </div>
@@ -58,80 +43,23 @@
                     </div>
                 </div>
                 <input type="submit" class="btn btn-primary btn-lg" value="Realizar Venda">
-            </form>
+            </form>           
+            
+            <table class="table table-hover col-md-6 lista-produtos" style="width: 100%;">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Preço</th>
+                        <th scope="col">Categoria</th>
+                        <th scope="col">Quantidade</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-            <div class="modal fade" id="modalProdutos" tabindex="-1" role="dialog" aria-labelledby="labelModalProdutos" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="labelModalProdutos">Produtos</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-hover col-md-6" style="width: 100%;">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th scope="col">Nome</th>
-                                        <th scope="col">Preço</th>
-                                        <th scope="col">Categoria</th>
-                                        <th scope="col">Quantidade</th>
-                                        <th scope="col">Ações</th>
-                                    </tr>
-                                </thead>
-                                <c:forEach var="prod" items="${produtos}">
-                                    <tr>
-                                        <td><c:out value="${prod.getNome()}" /></td>
-                                        <td><c:out value="R$ ${prod.getPrecoFormatado()}" /></td>
-                                        <td><c:out value="${prod.getCategoria()}" /></td>
-                                        <td>
-                                            <input style="width:80px" class="form-control" type="number" name="quantidade" value="1" min="1" max="<c:out value="${prod.getQuantidade()}" />" dt-id="<c:out value="${prod.getId()}" />">
-                                        </td>
-                                        <td>
-                                            <a class="add-item"href="#" title="Adicionar Produto" dt-price="<c:out value="${prod.getPreco()}"/>" dt-id="<c:out value="${prod.getId()}" />"><i class="fa fa-plus-circle fa-lg"></i></a>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal fade" id="modalClientes" tabindex="-1" role="dialog" aria-labelledby="labelModalClientes" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="labelModalClientes">Clientes</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-hover col-md-6" style="width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Nome</th>
-                                        <th scope="col">CPF</th>
-                                        <th scope="col">Ações</th>
-                                    </tr>
-                                </thead>
-                                <c:forEach var="prod" items="${clientes}">
-                                    <tr>
-                                        <td><c:out value="${prod.getNome()}" /></td>
-                                        <td><c:out value="R$ ${prod.getCpf()}" /></td>
-                                        <td>
-                                            <button type="button" onclick="setClienteId(<c:out value="${prod.getId()}" />, '<c:out value="${prod.getNome()}" />'); return false;" data-dismiss="modal" class="btn btn-secondary btn-sm">Selecionar Cliente</button>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+                </tbody>
+            </table>
+            
             <script>
                 var venda = {};
                 venda.produtos = [];
