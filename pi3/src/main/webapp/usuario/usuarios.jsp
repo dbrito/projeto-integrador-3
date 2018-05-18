@@ -47,33 +47,31 @@
                             </td>
                         </tr>
                     </c:forEach>
-                </tbody>
-                <script>
-                    $('.remove-item').click(function (e) {
-                        e.preventDefault();
-                        var user = e.currentTarget;
-                        var nomeUsuario = user.parentNode.parentNode.children[0].innerText;
-                        var excluir = confirm('Deseja excluir o usuário "'+nomeUsuario+'" ?');
-                        if(!excluir) return;
-
-                        window.currentUser = user;
-                        $.ajax({
-                            type: "POST",
-                            url: './excluir-usuario',
-                            data: {id : user.getAttribute('dt-id')},
-                            success: function (result, status) {
-                                //alert(result);
-                                $(window.currentUser.parentNode.parentNode).hide();
-                            }, error: function (err) {
-                                alert('Erro tente novamente mais tarde;')
-                            }
-                        });
-
-                    });
-
-                </script>
+                </tbody>                
             </table>
         </div>
+        <script>
+            $('.remove-item').click(function (e) {
+                e.preventDefault();
+                var user = e.currentTarget;
+                var nomeUsuario = user.parentNode.parentNode.children[0].innerText;
+                var excluir = confirm('Deseja excluir o usuário "'+nomeUsuario+'" ?');
+                if(!excluir) return;
 
+                window.currentUser = user;
+                $.ajax({
+                    type: "POST",
+                    url: './excluir-usuario',
+                    data: {id : user.getAttribute('dt-id')},
+                    success: function (result, status) {
+                        //alert(result);
+                        $(window.currentUser.parentNode.parentNode).hide();
+                    }, error: function (err) {
+                        alert('Erro tente novamente mais tarde;')
+                    }
+                });
+
+            });
+        </script>
     </body>
 </html>

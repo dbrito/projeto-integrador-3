@@ -12,153 +12,191 @@
         </style>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" >
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     </head>
     <body>
         <%@include file="./partials/menu.jsp" %>
 
         <div class="content">
             <h1><i class="fa fa-list fa-lg"></i> Relatórios</h1>
-            <form action="/realizar-venda" method="post" id="formulario">
-                <div class="row">
-                    <div class="form-group col-md-8">
-                        Cliente
-                        <input type="text" class="form-control col-md-5" disabled name="nomeCliente" id="nomeCliente" required>
-
-                        <a style="margin-top:10px" href="#" data-toggle="modal" data-target="#modalClientes" class="btn btn-secondary" id="selecionar-usuario" role="button">Selecionar Cliente</a>
-                    </div>
+            <div class="row">
+                <div class="form-group col-md-2">
+                    <label for="data_inicio">Data Inicio</label>
+                    <input type="text" class="form-control" name="data_inicio" id="data_inicio" required>
                 </div>
-                <div class="row">
-                    <div class="form-group col-md-10">                        
-                        
-                        <strong id="total-compra">Total: R$</strong>
-                    </div>
+
+                <div class="form-group col-md-2">
+                    <label for="data_inicio">Data Fim</label>
+                    <input type="text" class="form-control" name="data_fim" id="data_fim" required>
                 </div>
-                <div class="row">
-                    <div class="form-group col-md-10">
-                        <a style="margin-top:10px" href="#" data-toggle="modal" data-target="#modalProdutos" class="btn btn-secondary" id="selecionar-usuario" role="button">Adicionar Produto</a>
-                    </div>
+
+                <div class="form-group col-md-2">
+                    <label for="filial">Filial</label>
+                    <select class="form-control" name="filial" id="filial">
+                        <c:forEach var="fili" items="${filiais}">
+                            <option value="<c:out value="${fili.getId()}" />">
+                                <c:out value="${fili.getNome()}" />
+                            </option>
+                        </c:forEach>
+                    </select>
                 </div>
-                <input type="submit" class="btn btn-primary btn-lg" value="Realizar Venda">
-            </form>           
-            
-            <table class="table table-hover col-md-6 lista-produtos" style="width: 100%;">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Nome</th>
-                        <th scope="col">Preço</th>
-                        <th scope="col">Categoria</th>
-                        <th scope="col">Quantidade</th>
-                        <th scope="col">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
 
-                </tbody>
-            </table>
-            
-            <script>
-                var venda = {};
-                venda.produtos = [];
-
-                function setClienteId(id, clienteNome) {
-                    $('#nomeCliente').val(clienteNome);
-                    venda.clienteId = id;
+                <div class="form-group col-md-2">
+                    <input style="margin-top:32px;" type="submit" id="filtrar" class="btn btn-info" value="Gerar Relatório">
+                </div>
+            </div>
+            <style>
+                table {
+                    font-family: consolas;
                 }
-
-                //Lógica para adicionar os produtos
-                $('.add-item').click(function (e) {
-                    e.preventDefault();
-                    var produto = e.currentTarget;
-                    var elementoProduto = produto.parentNode.parentNode.cloneNode(true);
-                    var novoBotao = elementoProduto.children[4].children[0];
-                    var quantidade = elementoProduto.children[3].children[0];
-                    novoBotao.setAttribute('class', 'remove-item');
-                    quantidade.setAttribute('disabled', 'disabled');
-                    novoBotao.children[0].setAttribute('class', 'fa fa-trash fa-lg');
-
-                    var produto = {
-                        id: produto.getAttribute('dt-id'),
-                        preco: Number(produto.getAttribute('dt-price')),
-                        quantidade: parseInt(elementoProduto.children[3].children[0].value)
-                    }
-
-                    var produtoExistente = produtoFoiAdicionado(produto.id);
-                    console.log(produtoExistente);
-                    if (produtoExistente) {
-                        produtoExistente.quantidade += produto.quantidade;
-                        $('.lista-produtos tbody input[dt-id="'+ produto.id +'"]').val(produtoExistente.quantidade);
-                        $('#total-compra').text('Total: R$' + pegaTotalCompra());
-                        return;
-                    }
-
-                    $('.lista-produtos tbody').append(elementoProduto);
-                    venda.produtos.push(produto);
-                    $('#total-compra').text('Total: R$' + pegaTotalCompra());
-
-                    $('.remove-item').click(function (e) {
-                        e.preventDefault();
-                        var produto = $(e.currentTarget);
-
-                        for(var i = venda.produtos.length - 1; i >= 0; i--) {
-                            var item = venda.produtos[i];
-                            if(venda.produtos[i].id == produto.attr('dt-id')) {
-                                venda.produtos.splice(i, 1);
-                                produto.parent().parent().remove();
-                                console.log(venda.produtos);
-                                $('#total-compra').text('Total: R$' + pegaTotalCompra());
-                            }
-                        }
-                    });
-                });
-
-                function produtoFoiAdicionado(id) {
-                    for (var i=0;i < venda.produtos.length; i++) {
-                        var produto = venda.produtos[i];
-                        if (produto.id == id) return produto;
-                    }
-                    return false;
+                thead tr td {
+                    font-weight: bold;
                 }
-
-                function pegaTotalCompra() {
-                    var total = 0;
-                    for (var i=0;i < venda.produtos.length; i++) {
-                        var produto = venda.produtos[i];
-                        total += produto.preco * produto.quantidade;
-                    }
-                    return total;
+                .products {
+                    font-style:italic;
+                    font-size:12px;
                 }
+            </style>
+            <div class="row">
+                <div class="col-md-12"><table class=" table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td>Data</td>
+                            <td>Filial</td>
+                            <td>Vendedor</td>
+                            <td>Total</td>
+                        </tr>
+                    </thead>
 
-                $("#formulario").submit(function (e) {
-                    e.preventDefault();
-                    if (!venda.clienteId) {
-                        alert('Selecione um cliente');
-                        return;
-                    }
-                    if (venda.produtos.length == 0) {
-                        alert('Selecione ao menos um produto');
-                        return;
-                    }
-
-                    $.ajax({
-                        type: "POST",
-                        url: window.location.href,
-                        data: {"jsonData": JSON.stringify(venda)},
-                        success: function (result, status) {
-                            alert(result);
-                            if (status == 'success') {
-                                window.location.reload(false);
-                            }
-                        }, error: function (err) {
-                            alert('Erro tente novamente mais tarde;')
-                        }
-                    });
-                });
-            </script>
+                    <tbody>
+                        <tr>
+                            <td>18/05/2018</td>
+                            <td>Fast - Faria Lima</td>
+                            <td>Silvio Santos</td>
+                            <td>R$ 2.238,40</td>
+                        </tr>
+                        <tr class="products">
+                            <td colspan="1"></td>
+                            <td colspan="2">
+                                Dell Inspiron --> 2x <br>
+                                Iphone XPTO --> 4x <br>
+                                Tv Samsung 55" --> 1x <br>
+                            </td>
+                            <td>
+                                R$ 300,00 <br>
+                                R$ 788,00 <br>
+                                R$ 1.150,40 <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>18/05/2018</td>
+                            <td>Fast - Faria Lima</td>
+                            <td>Silvio Santos</td>
+                            <td>R$ 2.238,40</td>
+                        </tr>
+                        <tr class="products">
+                            <td colspan="1"></td>
+                            <td colspan="2">
+                                Dell Inspiron --> 2x <br>
+                                Iphone XPTO --> 4x <br>
+                                Tv Samsung 55" --> 1x <br>
+                            </td>
+                            <td>
+                                R$ 300,00 <br>
+                                R$ 788,00 <br>
+                                R$ 1.150,40 <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>18/05/2018</td>
+                            <td>Fast - Faria Lima</td>
+                            <td>Silvio Santos</td>
+                            <td>R$ 2.238,40</td>
+                        </tr>
+                        <tr class="products">
+                            <td colspan="1"></td>
+                            <td colspan="2">
+                                Dell Inspiron --> 2x <br>
+                                Iphone XPTO --> 4x <br>
+                                Tv Samsung 55" --> 1x <br>
+                            </td>
+                            <td>
+                                R$ 300,00 <br>
+                                R$ 788,00 <br>
+                                R$ 1.150,40 <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>18/05/2018</td>
+                            <td>Fast - Faria Lima</td>
+                            <td>Silvio Santos</td>
+                            <td>R$ 2.238,40</td>
+                        </tr>
+                        <tr class="products">
+                            <td colspan="1"></td>
+                            <td colspan="2">
+                                Dell Inspiron --> 2x <br>
+                                Iphone XPTO --> 4x <br>
+                                Tv Samsung 55" --> 1x <br>
+                            </td>
+                            <td>
+                                R$ 300,00 <br>
+                                R$ 788,00 <br>
+                                R$ 1.150,40 <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>18/05/2018</td>
+                            <td>Fast - Faria Lima</td>
+                            <td>Silvio Santos</td>
+                            <td>R$ 2.238,40</td>
+                        </tr>
+                        <tr class="products">
+                            <td colspan="1"></td>
+                            <td colspan="2">
+                                Dell Inspiron --> 2x <br>
+                                Iphone XPTO --> 4x <br>
+                                Tv Samsung 55" --> 1x <br>
+                            </td>
+                            <td>
+                                R$ 300,00 <br>
+                                R$ 788,00 <br>
+                                R$ 1.150,40 <br>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table></div>
+            </div>
         </div>
 
+        <script>
+            $.datepicker.regional['pt-BR'] = {
+                closeText: 'Fechar',
+                prevText: '&#x3c;Anterior',
+                nextText: 'Pr&oacute;ximo&#x3e;',
+                currentText: 'Hoje',
+                monthNames: ['Janeiro','Fevereiro','Mar&ccedil;o','Abril','Maio','Junho',
+                'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+                monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun',
+                'Jul','Ago','Set','Out','Nov','Dez'],
+                dayNames: ['Domingo','Segunda-feira','Ter&ccedil;a-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sabado'],
+                dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+                dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+                weekHeader: 'Sm',
+                dateFormat: 'dd/mm/yy',
+                firstDay: 0,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''};
+            $.datepicker.setDefaults($.datepicker.regional['pt-BR']);
+            $( "#data_inicio" ).datepicker();
+            $( "#data_fim" ).datepicker();
+        </script>
     </body>
 </html>

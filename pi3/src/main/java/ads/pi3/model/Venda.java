@@ -9,9 +9,12 @@ package ads.pi3.model;
  *
  * @author dbrito
  */
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Venda {
 
@@ -35,6 +38,11 @@ public class Venda {
     public Date getData() {
         return data;
     }
+    
+    public String getDataFormatada() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");        
+        return sdf.format(data);        
+    }    
 
     public void setData(Date data) {
         this.data = data;
@@ -75,9 +83,18 @@ public class Venda {
     public Double getTotal() {
         double total=0;        
         for (ItemVenda i : listaItens) {
-            total += i.getProduto().getPreco() * i.getQuantidade();
+            total += i.getPreco() * i.getQuantidade();
         }        
         return total;
+    }
+    
+    public String getTotalFormatado() {
+        double total=0;        
+        for (ItemVenda i : listaItens) {
+            total += i.getPreco() * i.getQuantidade();
+        }
+        Locale ptBr = new Locale("pt", "BR");        
+        return NumberFormat.getCurrencyInstance(ptBr).format(total);
     }
           
 }

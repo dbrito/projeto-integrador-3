@@ -1,5 +1,6 @@
 package ads.pi3.DAO;
 
+import ads.pi3.model.Filial;
 import ads.pi3.model.ItemVenda;
 import ads.pi3.model.Produto;
 import ads.pi3.model.Venda;
@@ -148,7 +149,7 @@ public class VendaDAO {
         }
     }
 
-    public static List<Venda> pegaRelatório(Date de, Date ate) throws SQLException, Exception {
+    public static List<Venda> pegaRelatório(Date de, Date ate, Filial filial) throws SQLException, Exception {
         Connection con = ConnectionFactory.getConnetion();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -156,9 +157,10 @@ public class VendaDAO {
         List<Venda> vendas = new ArrayList<>();
 
         try {
-            stmt = con.prepareStatement("SELECT * FROM venda WHERE data_venda >= ? AND data_venda <= ?");
+            stmt = con.prepareStatement("SELECT * FROM venda WHERE data_venda >= ? AND data_venda <= ? AND id_filial=? ORDER BY id_filial");
             stmt.setDate(1, (new java.sql.Date(de.getTime())));
             stmt.setDate(2, (new java.sql.Date(ate.getTime())));
+            stmt.setInt(3, filial.getId());
             rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -183,7 +185,43 @@ public class VendaDAO {
             return vendas;
         }
     }
+    
+    public static List<Venda> pegaRelatório(Date de, Date ate) throws SQLException, Exception {
+        Connection con = ConnectionFactory.getConnetion();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
 
+        List<Venda> vendas = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement("SELECT * FROM venda WHERE data_venda >= ? AND data_venda <= ?");
+            stmt.setDate(1, (new java.sql.Date(de.getTime())));
+            stmt.setDate(2, (new java.sql.Date(ate.getTime())));            
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Date d = new Date(rs.getTimestamp("data_venda").getTime());
+                Venda venda = new Venda();
+                venda.setId(rs.getInt("id_venda"));
+                venda.setData(d);
+                venda.setCliente(ClienteDAO.obter(rs.getInt("id_cliente")));
+                venda.setVendedor(UsuarioDAO.obter(rs.getInt("id_vendedor")));                
+                venda.setFilial(FilialDAO.obter(rs.getInt("id_filial")));
+                
+                List<ItemVenda> itens = pegaItens(venda.getId());
+                for (ItemVenda item : itens) {
+                    venda.addItem(item);
+                }
+                vendas.add(venda);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProdutoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+            return vendas;
+        }
+    }
+    
     private static List<ItemVenda> pegaItens(int idVenda) throws SQLException, Exception {
         Connection con = ConnectionFactory.getConnetion();
         PreparedStatement stmt = null;
