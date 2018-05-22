@@ -56,7 +56,7 @@
                 <ul class="sub-menu collapse" id="venda">
                     <li><a href="./realizar-venda">Realizar Venda</a></li>
                     <c:if test="${sessionScope.funcionario.getPerfil() == 'gerente'}">
-                        <li><a href="./relatorio">Relátorios de Vendas</a></li>
+                        <li><a href="./relatorios">Relátorios de Vendas</a></li>
                     </c:if>
                 </ul>
 

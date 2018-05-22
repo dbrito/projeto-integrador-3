@@ -157,7 +157,7 @@ public class VendaDAO {
         List<Venda> vendas = new ArrayList<>();
 
         try {
-            stmt = con.prepareStatement("SELECT * FROM venda WHERE data_venda >= ? AND data_venda <= ? AND id_filial=? ORDER BY id_filial");
+            stmt = con.prepareStatement("SELECT * FROM venda WHERE data_venda >= ? AND data_venda <= ? AND id_filial=? ORDER BY data_venda, id_filial");
             stmt.setDate(1, (new java.sql.Date(de.getTime())));
             stmt.setDate(2, (new java.sql.Date(ate.getTime())));
             stmt.setInt(3, filial.getId());

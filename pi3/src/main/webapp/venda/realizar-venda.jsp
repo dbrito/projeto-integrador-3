@@ -119,7 +119,7 @@
                                 <c:forEach var="prod" items="${clientes}">
                                     <tr>
                                         <td><c:out value="${prod.getNome()}" /></td>
-                                        <td><c:out value="R$ ${prod.getCpf()}" /></td>
+                                        <td><c:out value="${prod.getCpf()}" /></td>
                                         <td>
                                             <button type="button" onclick="setClienteId(<c:out value="${prod.getId()}" />, '<c:out value="${prod.getNome()}" />'); return false;" data-dismiss="modal" class="btn btn-secondary btn-sm">Selecionar Cliente</button>
                                         </td>
