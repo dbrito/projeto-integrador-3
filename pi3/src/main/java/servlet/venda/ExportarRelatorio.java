@@ -10,6 +10,7 @@ import ads.pi3.DAO.VendaDAO;
 import ads.pi3.model.Filial;
 import ads.pi3.model.ItemVenda;
 import ads.pi3.model.Venda;
+import ads.pi3.utils.Utils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.NumberFormat;
@@ -105,7 +106,7 @@ public class ExportarRelatorio extends HttpServlet {
             for (int j=0; j < itensVenda.size(); j++) {
                 ItemVenda item = itensVenda.get(j);
                 if (j!=0) textoItens += "\n";
-                textoItens += item.getQuantidade() + "x " + item.getProduto().getNome() + " (" + numToBrl(item.getPreco())+ ")";
+                textoItens += item.getQuantidade() + "x " + item.getProduto().getNome() + " (" + Utils.numToBrl(item.getPreco())+ ")";
             }
             System.out.println("-------");
             System.out.println(textoItens);
@@ -181,11 +182,5 @@ public class ExportarRelatorio extends HttpServlet {
         cellStyle.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);
         cellStyle.setFont(hSSFFont);
         return cellStyle;
-    }
-
-    String numToBrl(Double num) {
-        Locale ptBr = new Locale("pt", "BR");
-        return NumberFormat.getCurrencyInstance(ptBr).format(num);
-    }
-
+    }    
 }

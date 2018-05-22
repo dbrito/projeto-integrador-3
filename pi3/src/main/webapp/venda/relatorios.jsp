@@ -8,7 +8,7 @@
         <title>Relatórios</title>
 
         <style>
-            <%@include file="./css/geral.css" %>
+            <%@include file="../css/geral.css" %>
         </style>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" >
@@ -21,7 +21,7 @@
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     </head>
     <body>
-        <%@include file="./partials/menu.jsp" %>
+        <%@include file="../partials/menu.jsp" %>
 
         <div class="content">
             <h1><i class="fa fa-list fa-lg"></i> Relatórios</h1>
@@ -39,6 +39,7 @@
                 <div class="form-group col-md-2">
                     <label for="filial">Filial</label>
                     <select class="form-control" name="filial" id="filial">
+                        <option value="">Todas</option>
                         <c:forEach var="fili" items="${filiais}">
                             <option value="<c:out value="${fili.getId()}" />">
                                 <c:out value="${fili.getNome()}" />
@@ -71,105 +72,27 @@
                             <td>Filial</td>
                             <td>Vendedor</td>
                             <td>Total</td>
+                            <td>Itens</td>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>18/05/2018</td>
-                            <td>Fast - Faria Lima</td>
-                            <td>Silvio Santos</td>
-                            <td>R$ 2.238,40</td>
-                        </tr>
-                        <tr class="products">
-                            <td colspan="1"></td>
-                            <td colspan="2">
-                                Dell Inspiron --> 2x <br>
-                                Iphone XPTO --> 4x <br>
-                                Tv Samsung 55" --> 1x <br>
-                            </td>
-                            <td>
-                                R$ 300,00 <br>
-                                R$ 788,00 <br>
-                                R$ 1.150,40 <br>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>18/05/2018</td>
-                            <td>Fast - Faria Lima</td>
-                            <td>Silvio Santos</td>
-                            <td>R$ 2.238,40</td>
-                        </tr>
-                        <tr class="products">
-                            <td colspan="1"></td>
-                            <td colspan="2">
-                                Dell Inspiron --> 2x <br>
-                                Iphone XPTO --> 4x <br>
-                                Tv Samsung 55" --> 1x <br>
-                            </td>
-                            <td>
-                                R$ 300,00 <br>
-                                R$ 788,00 <br>
-                                R$ 1.150,40 <br>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>18/05/2018</td>
-                            <td>Fast - Faria Lima</td>
-                            <td>Silvio Santos</td>
-                            <td>R$ 2.238,40</td>
-                        </tr>
-                        <tr class="products">
-                            <td colspan="1"></td>
-                            <td colspan="2">
-                                Dell Inspiron --> 2x <br>
-                                Iphone XPTO --> 4x <br>
-                                Tv Samsung 55" --> 1x <br>
-                            </td>
-                            <td>
-                                R$ 300,00 <br>
-                                R$ 788,00 <br>
-                                R$ 1.150,40 <br>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>18/05/2018</td>
-                            <td>Fast - Faria Lima</td>
-                            <td>Silvio Santos</td>
-                            <td>R$ 2.238,40</td>
-                        </tr>
-                        <tr class="products">
-                            <td colspan="1"></td>
-                            <td colspan="2">
-                                Dell Inspiron --> 2x <br>
-                                Iphone XPTO --> 4x <br>
-                                Tv Samsung 55" --> 1x <br>
-                            </td>
-                            <td>
-                                R$ 300,00 <br>
-                                R$ 788,00 <br>
-                                R$ 1.150,40 <br>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>18/05/2018</td>
-                            <td>Fast - Faria Lima</td>
-                            <td>Silvio Santos</td>
-                            <td>R$ 2.238,40</td>
-                        </tr>
-                        <tr class="products">
-                            <td colspan="1"></td>
-                            <td colspan="2">
-                                Dell Inspiron --> 2x <br>
-                                Iphone XPTO --> 4x <br>
-                                Tv Samsung 55" --> 1x <br>
-                            </td>
-                            <td>
-                                R$ 300,00 <br>
-                                R$ 788,00 <br>
-                                R$ 1.150,40 <br>
-                            </td>
-                        </tr>
+                        <c:forEach var="venda" items="${vendas}">
+                            <tr>
+                                <td><c:out value="${venda.getDataFormatada()}" /></td>
+                                <td><c:out value="${venda.getFilial().getNome()}" /></td>
+                                <td><c:out value="${venda.getVendedor().getNome()}" /></td>
+                                <td><c:out value="${venda.getTotalFormatado()}" /></td>
+                                <td class='products'>
+                                    <c:forEach var="item" items="${venda.getItens()}">
+                                        <c:out value="${item.getQuantidade()}" />x
+                                        <c:out value="${item.getProduto().getNome()}" />
+                                        (<c:out value="${utils.numToBrl(item.getPreco())}" />)
+                                        <br>
+                                    </c:forEach>
+                                </td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table></div>
             </div>
