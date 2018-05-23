@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : cadastrar-cliente
     Created on : 08/05/2018, 13:50:59
     Author     : ninck
@@ -20,6 +20,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" >
 
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/jquery.mask.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     </head>
@@ -38,7 +39,7 @@
                         <label for="cpf">CPF:</label>
                         <input type="text" class="form-control" name="cpf" id="cpf" required>
                     </div>
-                </div>              
+                </div>
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="data_nascimento">Data de Nascimento</label>
@@ -48,20 +49,24 @@
                         <label for="telefone">Telefone</label>
                         <input type="text" class="form-control" name="telefone" id="telefone">
                     </div>
-                </div> 
+                </div>
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="email">E-mail</label>
                          <input type="email" class="form-control" name="email" id="email">
-                    </div>                    
-                </div> 
-               
-                <input type="submit" class="btn btn-info" value="Salvar">            
+                    </div>
+                </div>
+
+                <input type="submit" class="btn btn-info" value="Salvar">
                 <!-- <a href="#" class="btn btn-info" role="button">Cancelar</a> -->
-            </form>       
+            </form>
             <script>
+                $('#cpf').mask('000.000.000-00', {reverse: true});
+                $('#data_nascimento').mask('00/00/0000', {placeholder: "__/__/____"});
+                $('#telefone').mask('(00) 0000-0000', {placeholder: "(  )    -   "});
+
                 $('#formulario').click(function () { console.log('here') })
-                $("#formulario").submit(function (e) {                                
+                $("#formulario").submit(function (e) {
                     e.preventDefault();
                     $.ajax({
                         type: "POST",
@@ -69,17 +74,11 @@
                         data: $("#formulario").serialize(),
                         success: function (result, status) {
                             alert(result);
-                            if (status == 'success') {
-                                $('#nome').val('');
-                                $('#cpf').val('');
-                                $('#data_nascimento').val('');
-                                $('#telefone').val('');
-                                $('#email').val('');                                                                                        
-                            }
+                            window.location.href = './clientes';
                         }, error: function (err) {
                             alert('Erro tente novamente mais tarde;')
                         }
-                    });                
+                    });
                 });
             </script>
         </div>

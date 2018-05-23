@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" >
 
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdn.rawgit.com/plentz/jquery-maskmoney/master/dist/jquery.maskMoney.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     </head>
@@ -32,17 +33,17 @@
                         <label for="marca">Marca:</label>
                         <input type="text" class="form-control" name="marca" id="marca" required>
                     </div>
-                </div>            
+                </div>
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="preco">Preço (R$):</label>
-                        <input type="number" class="form-control" name="preco" id="preco"/ required>
+                        <input type="text" class="form-control" name="preco" id="preco"/ required>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="quantidade">Quantidade (estoque):</label>
                         <input type="number" class="form-control" name="quantidade" id="quantidade" required>
                     </div>
-                </div>            
+                </div>
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="descricao">Descrição:</label>
@@ -56,12 +57,12 @@
                         </select>
                     </div>
                 </div>
-                <input type="submit" class="btn btn-info" value="Salvar">            
+                <input type="submit" class="btn btn-info" value="Salvar">
                 <!-- <a href="#" class="btn btn-info" role="button">Cancelar</a> -->
-            </form>       
+            </form>
             <script>
                 $('#formulario').click(function () { console.log('here') })
-                $("#formulario").submit(function (e) {                                
+                $("#formulario").submit(function (e) {
                     e.preventDefault();
                     $.ajax({
                         type: "POST",
@@ -74,12 +75,18 @@
                                 $('#marca').val('');
                                 $('#preco').val('');
                                 $('#quantidade').val('');
-                                $('#descricao').val('');                            
+                                $('#descricao').val('');
                             }
                         }, error: function (err) {
                             alert('Erro tente novamente mais tarde;')
                         }
-                    });                
+                    });
+                });
+
+                $("#preco").maskMoney({
+                    prefix: "",
+                    decimal: ",",
+                    thousands: "."
                 });
             </script>
         </div>

@@ -8,8 +8,10 @@ package servlet.produto;
 import ads.pi3.DAO.ProdutoDAO;
 import ads.pi3.model.Produto;
 import ads.pi3.model.Usuario;
+import ads.pi3.utils.Utils;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -73,14 +75,14 @@ public class EditarProduto extends HttpServlet {
             Logger.getLogger(EditarProduto.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
-                
-        prod.setNome(request.getParameter("nome"));        
-        prod.setMarca(request.getParameter("marca"));        
-        prod.setPreco(Double.parseDouble(request.getParameter("preco")));        
-        prod.setQuantidade(Integer.parseInt(request.getParameter("quantidade")));        
-        prod.setCategoria(request.getParameter("categoria"));        
-        prod.setDescricao(request.getParameter("descricao"));                
+                        
         try {
+            prod.setNome(request.getParameter("nome"));        
+            prod.setMarca(request.getParameter("marca"));        
+            prod.setPreco(Utils.brlToNum(request.getParameter("preco")));        
+            prod.setQuantidade(Integer.parseInt(request.getParameter("quantidade")));        
+            prod.setCategoria(request.getParameter("categoria"));        
+            prod.setDescricao(request.getParameter("descricao"));                
             ProdutoDAO.atualizar(prod);
         } catch (Exception ex) {
             response.sendError(503, ex.toString());

@@ -8,9 +8,13 @@ package servlet.produto;
 import ads.pi3.DAO.ProdutoDAO;
 import ads.pi3.model.Produto;
 import ads.pi3.model.Usuario;
+import ads.pi3.utils.Utils;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -57,14 +61,18 @@ public class CadastrarProduto extends HttpServlet {
         } catch(Exception e) {}
         
         Produto novoProd = new Produto();
-        novoProd.setNome(request.getParameter("nome"));        
-        novoProd.setMarca(request.getParameter("marca"));        
-        novoProd.setPreco(Double.parseDouble(request.getParameter("preco")));        
-        novoProd.setQuantidade(Integer.parseInt(request.getParameter("quantidade")));        
-        novoProd.setCategoria(request.getParameter("categoria"));        
-        novoProd.setDescricao(request.getParameter("descricao"));                
-        ProdutoDAO.inserir(novoProd);
-        
+        try {                            
+            novoProd.setNome(request.getParameter("nome"));        
+            novoProd.setMarca(request.getParameter("marca"));        
+            novoProd.setPreco(Utils.brlToNum(request.getParameter("preco")));
+            novoProd.setQuantidade(Integer.parseInt(request.getParameter("quantidade")));        
+            novoProd.setCategoria(request.getParameter("categoria"));        
+            novoProd.setDescricao(request.getParameter("descricao"));                
+            ProdutoDAO.inserir(novoProd);
+        } catch (ParseException ex) {
+            Logger.getLogger(CadastrarProduto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
         PrintWriter resposta = response.getWriter();
         resposta.println("O produto '" + novoProd.getNome() + "' foi cadastrado com sucesso.");
     }

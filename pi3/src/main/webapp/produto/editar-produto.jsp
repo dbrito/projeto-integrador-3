@@ -12,8 +12,9 @@
         </style>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" >
-
+                
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://cdn.rawgit.com/plentz/jquery-maskmoney/master/dist/jquery.maskMoney.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     </head>
@@ -36,7 +37,7 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="preco">Preço (R$):</label>
-                        <input type="number" class="form-control" name="preco" id="preco" value="<c:out value="${prod.getPreco()}" />" required>
+                        <input type="text" class="form-control" name="preco" id="preco" value="<c:out value="${prod.getPrecoFormatado()}" />" required>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="quantidade">Quantidade (estoque):</label>
@@ -73,6 +74,12 @@
                             alert('Erro tente novamente mais tarde;')
                         }
                     });                
+                });
+                
+                $("#preco").maskMoney({
+                    prefix: "",
+                    decimal: ",",
+                    thousands: "."
                 });
             </script>
         </div>
