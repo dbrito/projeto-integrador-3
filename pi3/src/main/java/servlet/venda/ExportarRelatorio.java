@@ -9,6 +9,7 @@ import ads.pi3.DAO.FilialDAO;
 import ads.pi3.DAO.VendaDAO;
 import ads.pi3.model.Filial;
 import ads.pi3.model.ItemVenda;
+import ads.pi3.model.Usuario;
 import ads.pi3.model.Venda;
 import ads.pi3.utils.Utils;
 import java.io.IOException;
@@ -45,6 +46,20 @@ public class ExportarRelatorio extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            //Caso o usuário não esteja logado redireciono para a tela de login
+            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
+            if (user ==  null) {
+                response.sendRedirect("login");
+                return;
+            }
+            //Caso o usuário esteja loga mas não seja um gerente redireciona para a tela de acesso negado
+            else if (!user.getPerfil().equals("gerente")){
+                response.sendRedirect(request.getContextPath() + "/acesso-negado.html");
+                return;
+            }
+        } catch(Exception e) {}
+        
         //Recupero as vendas com base nos parametros repassados
         List<Venda> vendas = getVendas(request);
 
