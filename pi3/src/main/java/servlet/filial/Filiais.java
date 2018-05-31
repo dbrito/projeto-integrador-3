@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import ads.pi3.model.Filial;
 import ads.pi3.model.Usuario;
+import ads.pi3.utils.Utils;
 import javax.servlet.RequestDispatcher;
 
 @WebServlet (urlPatterns = {"/filiais"})
@@ -19,19 +20,14 @@ public class Filiais extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            //Caso o usuário não esteja logado redireciono para a tela de login
-            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
-            if (user ==  null) {
-                response.sendRedirect("login");
-                return;
-            }
-            //Caso o usuário esteja loga mas não seja um gerente redireciona para a tela de acesso negado
-            else if (!user.getPerfil().equals("gerente")){
-                response.sendRedirect(request.getContextPath() + "/acesso-negado.html");
-                return;
-            }
-        } catch(Exception e) {}
+        Usuario user = Utils.getCurrentUser(request);
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        } else if (!user.getPerfil().equals("gerente")){
+            response.sendRedirect(request.getContextPath() + "/acesso-negado.html");
+            return;
+        }
 
         //Armazenar em um objeto todos os valores já salvos no Banco.
         List<Filial> listar = FilialDAO.listar();

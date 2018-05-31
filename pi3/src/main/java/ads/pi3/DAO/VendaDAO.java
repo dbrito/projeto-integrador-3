@@ -237,7 +237,7 @@ public class VendaDAO {
                 ItemVenda item = new ItemVenda();
                 item.setQuantidade(rs.getInt("quantidade"));
                 item.setProduto(ProdutoDAO.obter(rs.getInt("id_produto")));
-                item.setPreco(rs.getDouble("id_produto"));
+                item.setPreco(rs.getDouble("preco"));
                 itens.add(item);
             }
         } catch (SQLException ex) {

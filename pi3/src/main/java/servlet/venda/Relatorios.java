@@ -73,7 +73,7 @@ public class Relatorios extends HttpServlet {
             fim = sdf.parse(request.getParameter("data_fim"));
         } catch (Exception ex) {}
         try {
-            filial = FilialDAO.obter( Integer.valueOf(request.getParameter("filial_id")) );
+            filial = FilialDAO.obter( Integer.valueOf(request.getParameter("filial")) );
         } catch (Exception ex) {}
 
         //Com os parametros decido qual metodo de busca utilizo

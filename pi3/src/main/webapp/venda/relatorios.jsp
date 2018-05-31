@@ -163,9 +163,8 @@
 
                 if (window.filial) {
                     url += ((url.indexOf('?') > -1) ? '&' : '?') + 'filial=' + window.filial;
-                }
-                console.log(url);
-                //window.location.href = url;
+                }                
+                window.location.href = url;
             }
 
         </script>

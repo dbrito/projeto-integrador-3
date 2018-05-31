@@ -9,6 +9,7 @@ import ads.pi3.DAO.FilialDAO;
 import ads.pi3.DAO.UsuarioDAO;
 import ads.pi3.model.Filial;
 import ads.pi3.model.Usuario;
+import ads.pi3.utils.Utils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -30,49 +31,40 @@ public class EditarUsuario extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
-        try {
-            //Caso o usuário não esteja logado redireciono para a tela de login
-            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
-            if (user ==  null) {
-                response.sendRedirect("login");
-                return;
-            }
-            //Caso o usuário esteja loga mas não seja um gerente redireciona para a tela de acesso negado
-            else if (!user.getPerfil().equals("gerente")){
-                response.sendRedirect(request.getContextPath() + "/acesso-negado.html");
-                return;
-            }
-        } catch(Exception e) {}
+        Usuario user = Utils.getCurrentUser(request);
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        } else if (!user.getPerfil().equals("gerente")){
+            response.sendRedirect(request.getContextPath() + "/acesso-negado.html");
+            return;
+        }   
         
-        Usuario user = null;
+        Usuario funcionario = null;
         List<Filial> filiais = null;
         try {        
-            user = UsuarioDAO.obter(Integer.parseInt(request.getParameter("id")));
+            funcionario = UsuarioDAO.obter(Integer.parseInt(request.getParameter("id")));
             filiais = FilialDAO.listar();
         } catch (Exception ex) {
             response.sendError(404, "Usuário não encontrado");
             Logger.getLogger(EditarUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
-        request.setAttribute("user", user);
+        request.setAttribute("user", funcionario);
         request.setAttribute("filiais", filiais);
         RequestDispatcher meuk = request.getRequestDispatcher("./usuario/editar-usuario.jsp");
         meuk.forward(request, response);                                        
     }
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
-        try {
-            //Caso o usuário não esteja logado ou não seja um gerente não permito o cadastro
-            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
-            if (user ==  null || !user.getPerfil().equals("gerente")) {
-                response.sendError(403, "Acesso negado");
-                return;
-            }
-        } catch(Exception e) {}
+        Usuario user = Utils.getCurrentUser(request);
+        if (user ==  null || !user.getPerfil().equals("gerente")) {
+            response.sendError(403, "Acesso negado");
+            return;
+        }                
         
-        
-        Usuario user;
+        Usuario funcionario;
         try {        
-            user = UsuarioDAO.obter(Integer.parseInt(request.getParameter("id")));
+            funcionario = UsuarioDAO.obter(Integer.parseInt(request.getParameter("id")));
         } catch (Exception ex) {
             response.sendError(404, "Usuário não encontrado");
             Logger.getLogger(EditarUsuario.class.getName()).log(Level.SEVERE, null, ex);
@@ -80,16 +72,16 @@ public class EditarUsuario extends HttpServlet {
         }
                                 
         try {
-            user.setNome(request.getParameter("nome"));        
-            user.setCpf(request.getParameter("cpf"));        
-            user.setUser(request.getParameter("user"));        
-            user.setPass(request.getParameter("pass"));              
-            user.setPerfil(request.getParameter("perfil"));
+            funcionario.setNome(request.getParameter("nome"));        
+            funcionario.setCpf(request.getParameter("cpf"));        
+            funcionario.setUser(request.getParameter("user"));        
+            funcionario.setPass(request.getParameter("pass"));              
+            funcionario.setPerfil(request.getParameter("perfil"));
             Filial filial;
             filial = FilialDAO.obter(Integer.parseInt(request.getParameter("filial")));
-            user.setFilial(filial);
+            funcionario.setFilial(filial);
             
-            UsuarioDAO.atualizar(user);
+            UsuarioDAO.atualizar(funcionario);
         } catch (Exception ex) {
             response.sendError(503, ex.toString());
             Logger.getLogger(EditarUsuario.class.getName()).log(Level.SEVERE, null, ex);

@@ -7,6 +7,8 @@ package servlet.cliente;
 
 import ads.pi3.DAO.ClienteDAO;
 import ads.pi3.model.Cliente;
+import ads.pi3.model.Usuario;
+import ads.pi3.utils.Utils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -31,12 +33,21 @@ public class CadastrarCliente extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {         
+        if (Utils.getCurrentUser(request) == null) {
+            response.sendRedirect("login");
+            return;
+        }
+        
         RequestDispatcher meuk = request.getRequestDispatcher("./cliente/cadastrar-cliente.jsp");
         meuk.forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
+        if (Utils.getCurrentUser(request) == null) {
+            response.sendError(403, "Acesso negado");
+            return;
+        } 
         
         Cliente novoCliente = new Cliente();
         try {        

@@ -7,6 +7,8 @@ package servlet.cliente;
 
 import ads.pi3.DAO.ClienteDAO;
 import ads.pi3.model.Cliente;
+import ads.pi3.model.Usuario;
+import ads.pi3.utils.Utils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -28,10 +30,13 @@ import javax.servlet.http.HttpServletResponse;
 public class ExcluirCliente extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                         
-        System.out.println("AGORA");
-        request.getParameterMap();
-        System.out.println(request.getParameter("id"));
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                                 
+        if (Utils.getCurrentUser(request) == null) {
+            response.sendError(403, "Acesso negado");
+            return;
+        } 
+        
+        request.getParameterMap();        
         try {                    
             ClienteDAO.excluir(Integer.parseInt(request.getParameter("id")));                                               
         } catch (Exception ex) {

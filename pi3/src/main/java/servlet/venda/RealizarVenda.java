@@ -13,6 +13,7 @@ import ads.pi3.model.ItemVenda;
 import ads.pi3.model.Produto;
 import ads.pi3.model.Usuario;
 import ads.pi3.model.Venda;
+import ads.pi3.utils.Utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -38,14 +39,10 @@ public class RealizarVenda extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {         
-        try {
-            //Caso o usuário não esteja logado redireciono para a tela de login
-            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
-            if (user ==  null) {
-                response.sendRedirect("login");
-                return;
-            }            
-        } catch(Exception e) {}
+        if (Utils.getCurrentUser(request) == null) {
+            response.sendRedirect("login");
+            return;
+        }
         
         List<Cliente> clientes = ClienteDAO.listar();                
         request.setAttribute("clientes", clientes);        
@@ -58,15 +55,11 @@ public class RealizarVenda extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                                 
-        Usuario user = null;
-        try {
-            //Caso o usuário não esteja logado ou não seja um gerente não permito o cadastro
-            user = (Usuario) request.getSession().getAttribute("funcionario");
-            if (user ==  null) {
-                response.sendError(403, "Acesso negado");
-                return;
-            }
-        } catch(Exception e) {} 
+        Usuario user = Utils.getCurrentUser(request);
+        if (user == null) {
+            response.sendError(403, "Acesso negado");
+            return;
+        }        
         
         try {
             JSONObject json = new JSONObject(request.getParameter("jsonData"));

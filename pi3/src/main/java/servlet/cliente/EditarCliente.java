@@ -7,6 +7,8 @@ package servlet.cliente;
 
 import ads.pi3.DAO.ClienteDAO;
 import ads.pi3.model.Cliente;
+import ads.pi3.model.Usuario;
+import ads.pi3.utils.Utils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -29,6 +31,11 @@ public class EditarCliente extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
+        if (Utils.getCurrentUser(request) == null) {
+            response.sendRedirect("login");
+            return;
+        }
+        
         Cliente clie = null;
         try {        
             clie = ClienteDAO.obter(Integer.parseInt(request.getParameter("id")));
@@ -42,6 +49,11 @@ public class EditarCliente extends HttpServlet {
     }
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
+        if (Utils.getCurrentUser(request) == null) {
+            response.sendError(403, "Acesso negado");
+            return;
+        }        
+        
         Cliente clie;
         try {        
             clie = ClienteDAO.obter(Integer.parseInt(request.getParameter("id")));
@@ -58,8 +70,7 @@ public class EditarCliente extends HttpServlet {
             Date dataNascimento = sdf.parse(request.getParameter("data_nascimento"));
             clie.setData_nascimento(dataNascimento);
             clie.setTelefone(request.getParameter("telefone"));
-            clie.setEmail(request.getParameter("email"));                
-            ClienteDAO.inserir(clie);       
+            clie.setEmail(request.getParameter("email"));            
             ClienteDAO.atualizar(clie);
         } catch (Exception ex) {
             response.sendError(503, ex.toString());

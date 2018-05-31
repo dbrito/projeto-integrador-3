@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import ads.pi3.DAO.ClienteDAO;
 import ads.pi3.model.Cliente;
+import ads.pi3.model.Usuario;
+import ads.pi3.utils.Utils;
 import java.util.List;
 
 /**
@@ -26,6 +28,11 @@ public class Clientes extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                
+        if (Utils.getCurrentUser(request) == null) {
+            response.sendRedirect("login");
+            return;
+        }
+                
         List<Cliente> teste = ClienteDAO.listar();                
         request.setAttribute("clientes", teste);        
         RequestDispatcher meuk = request.getRequestDispatcher("./cliente/clientes.jsp");

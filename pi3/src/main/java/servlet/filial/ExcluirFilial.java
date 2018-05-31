@@ -2,6 +2,7 @@ package servlet.filial;
 
 import ads.pi3.DAO.FilialDAO;
 import ads.pi3.model.Usuario;
+import ads.pi3.utils.Utils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,14 +22,11 @@ public class ExcluirFilial extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            //Caso o usuário não esteja logado não permito o cadastro
-            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
-            if (user ==  null || !user.getPerfil().equals("gerente")) {
-                response.sendError(403, "Acesso negado");
-                return;
-            }
-        } catch(Exception e) {}
+        Usuario user = Utils.getCurrentUser(request);
+        if (user ==  null || !user.getPerfil().equals("gerente")) {
+            response.sendError(403, "Acesso negado");
+            return;
+        }
         
         request.getParameterMap();
         try {

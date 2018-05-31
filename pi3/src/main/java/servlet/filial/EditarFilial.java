@@ -8,6 +8,7 @@ package servlet.filial;
 import ads.pi3.DAO.FilialDAO;
 import ads.pi3.model.Filial;
 import ads.pi3.model.Usuario;
+import ads.pi3.utils.Utils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -28,19 +29,14 @@ public class EditarFilial extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            //Caso o usuário não esteja logado redireciono para a tela de login
-            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
-            if (user ==  null) {
-                response.sendRedirect("login");
-                return;
-            }
-            //Caso o usuário esteja loga mas não seja um gerente redireciona para a tela de acesso negado
-            else if (!user.getPerfil().equals("gerente")){
-                response.sendRedirect(request.getContextPath() + "/acesso-negado.html");
-                return;
-            }
-        } catch(Exception e) {}
+        Usuario user = Utils.getCurrentUser(request);
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        } else if (!user.getPerfil().equals("gerente")){
+            response.sendRedirect(request.getContextPath() + "/acesso-negado.html");
+            return;
+        }
 
         Filial filial = null;
         try {
@@ -55,39 +51,36 @@ public class EditarFilial extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            //Caso o usuário não esteja logado não permito o cadastro
-            Usuario user = (Usuario) req.getSession().getAttribute("funcionario");
-            if (user ==  null || !user.getPerfil().equals("gerente")) {
-                resp.sendError(403, "Acesso negado");
-                return;
-            }
-        } catch(Exception e) {}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Usuario user = Utils.getCurrentUser(request);
+        if (user ==  null || !user.getPerfil().equals("gerente")) {
+            response.sendError(403, "Acesso negado");
+            return;
+        }
         
         Filial filial = null;
         
         try {
-            filial = FilialDAO.obter(Integer.parseInt(req.getParameter("id")));
+            filial = FilialDAO.obter(Integer.parseInt(request.getParameter("id")));
         } catch (Exception e) {
-            resp.sendError(404, "Filial nao encontrada.");
+            response.sendError(404, "Filial nao encontrada.");
             return;
         }
 
-        filial.setNome(req.getParameter("nome"));
-        filial.setEndereco(req.getParameter("endereco"));
-        filial.setNumero(Integer.parseInt(req.getParameter("numero")));
-        filial.setCidade(req.getParameter("cidade"));
-        filial.setEstado(req.getParameter("estado"));
+        filial.setNome(request.getParameter("nome"));
+        filial.setEndereco(request.getParameter("endereco"));
+        filial.setNumero(Integer.parseInt(request.getParameter("numero")));
+        filial.setCidade(request.getParameter("cidade"));
+        filial.setEstado(request.getParameter("estado"));
 
         try {
             FilialDAO.atualizar(filial);
         } catch (Exception e) {
-            resp.sendError(503, e.getMessage());
+            response.sendError(503, e.getMessage());
             return;
         }
 
-        PrintWriter resposta = resp.getWriter();
+        PrintWriter resposta = response.getWriter();
         resposta.println("A filial '" + filial.getNome() + "' foi atualizada com sucesso.");
     }
 

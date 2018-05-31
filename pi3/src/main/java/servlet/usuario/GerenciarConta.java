@@ -4,6 +4,7 @@ import ads.pi3.DAO.FilialDAO;
 import ads.pi3.DAO.UsuarioDAO;
 import ads.pi3.model.Filial;
 import ads.pi3.model.Usuario;
+import ads.pi3.utils.Utils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -25,15 +26,11 @@ public class GerenciarConta extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
-        Usuario user = null;
-        try {
-            //Caso o usuário não esteja logado redireciono para a tela de login
-            user = (Usuario) request.getSession().getAttribute("funcionario");
-            if (user ==  null) {
-                response.sendRedirect("login");
-                return;
-            }            
-        } catch(Exception e) {}
+        Usuario user = Utils.getCurrentUser(request);
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        }        
                 
         List<Filial> filiais = null;
         try {                    
@@ -50,15 +47,11 @@ public class GerenciarConta extends HttpServlet {
     }
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
-        Usuario user = null;
-        try {
-            //Caso o usuário não esteja logado não permito o cadastro
-            user = (Usuario) request.getSession().getAttribute("funcionario");
-            if (user == null) {
-                response.sendError(403, "Acesso negado");
-                return;
-            }
-        } catch(Exception e) {}                               
+        Usuario user = Utils.getCurrentUser(request);
+        if (user == null) {
+            response.sendError(403, "Acesso negado");
+            return;
+        }
                                 
         try {            
             user.setUser(request.getParameter("user"));        

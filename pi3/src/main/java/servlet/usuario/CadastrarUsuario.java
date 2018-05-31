@@ -9,6 +9,7 @@ import ads.pi3.DAO.FilialDAO;
 import ads.pi3.DAO.UsuarioDAO;
 import ads.pi3.model.Filial;
 import ads.pi3.model.Usuario;
+import ads.pi3.utils.Utils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -27,20 +28,14 @@ public class CadastrarUsuario extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {         
-        try {
-            //Caso o usuário não esteja logado redireciono para a tela de login
-            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
-            if (user ==  null) {
-                response.sendRedirect("login");
-                return;
-            }
-            //Caso o usuário esteja loga mas não seja um gerente redireciona para a tela de acesso negado
-            else if (!user.getPerfil().equals("gerente")){
-                response.sendRedirect(request.getContextPath() + "/acesso-negado.html");
-                return;
-            }
-        } catch(Exception e) {}
-        
+        Usuario user = Utils.getCurrentUser(request);
+        if (user == null) {
+            response.sendRedirect("login");
+            return;
+        } else if (!user.getPerfil().equals("gerente")){
+            response.sendRedirect(request.getContextPath() + "/acesso-negado.html");
+            return;
+        }        
         
         List<Filial> filiais = FilialDAO.listar();
         request.setAttribute("filiais", filiais);
@@ -50,14 +45,11 @@ public class CadastrarUsuario extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {                 
-        try {
-            //Caso o usuário não esteja logado ou não seja um gerente não permito o cadastro
-            Usuario user = (Usuario) request.getSession().getAttribute("funcionario");
-            if (user ==  null || !user.getPerfil().equals("gerente")) {
-                response.sendError(403, "Acesso negado");
-                return;
-            }
-        } catch(Exception e) {}
+        Usuario user = Utils.getCurrentUser(request);
+        if (user ==  null || !user.getPerfil().equals("gerente")) {
+            response.sendError(403, "Acesso negado");
+            return;
+        }
         
         try {
             Usuario novoUser = new Usuario();
